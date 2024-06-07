@@ -15,11 +15,12 @@ function App() {
   }
 
   return (
-    <div>
-      <div id="d1" draggable="true" onDragStart={handleDragStart}>Drag me</div>
-      <div id="d2" draggable="true" onDragStart={handleDragStart}>or me!</div>
-      <div onDragOver={enableDropping} onDrop={handleDrop}>Drop Area</div>
-    </div>
+    <>
+      <div className="parametros" id="d1" draggable="true" onDragStart={handleDragStart}><h2>Idea</h2></div>
+      <div className="parametros" id="d2" draggable="true" onDragStart={handleDragStart}><h2>Iniciando</h2></div>
+      <div className="parametros" id="d3" draggable="true" onDragStart={handleDragStart}><h2>Finalizado</h2></div>
+      <div onDragOver={enableDropping} onDrop={handleDrop}><h2>Drop Area</h2></div>
+    </>
   );
 }
 
