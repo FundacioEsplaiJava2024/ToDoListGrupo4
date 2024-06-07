@@ -10,6 +10,7 @@ function App() {
       <div className="parametros">
         <h2 className='sub'>Idea</h2>
         <button  id='aggTarea'><p className='agg'>+</p></button>
+        <div className="listas"></div>
       </div>
       
       <div className="parametros" ><h2 className='sub'>Iniciando</h2></div>
