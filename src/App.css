@@ -56,8 +56,12 @@
 }
 #aggTarea{
   display: flex;
+  position: sticky;
+    left: 30%;
+    margin-top: 15px;
 }
 #aggTarea .agg{
   font-size: 35px;
   font-weight: bold;
+  margin: 0;
 }
