@@ -1,10 +1,13 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
 
+    padding: 2rem;
+    text-align: center;
+    display: flex;
+    width: 80%;
+    height: 100vh;
+    justify-content: space-around;
+    margin: 0  auto;
+}
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -39,4 +42,26 @@
 
 .read-the-docs {
   color: #888;
+}
+.parametros{
+  border: 1px solid grey;
+  width: 30%;
+  border-radius: 10px;
+}
+.sub{
+  width: 80%;
+  border-bottom: 1px solid gray;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+#aggTarea{
+  display: flex;
+  position: sticky;
+    left: 30%;
+    margin-top: 15px;
+}
+#aggTarea .agg{
+  font-size: 35px;
+  font-weight: bold;
+  margin: 0;
 }
