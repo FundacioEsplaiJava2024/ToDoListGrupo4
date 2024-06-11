@@ -1,6 +1,5 @@
-import { useTaskManager } from './Elementos/Columna';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
+import { useTaskManager } from './hook/useTaskManager';
+
 import './App.css';
 
 function App() {
