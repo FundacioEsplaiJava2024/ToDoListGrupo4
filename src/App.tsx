@@ -1,5 +1,7 @@
-import { useTaskManager } from './hook/useTaskManager';
-
+import { useTaskManager } from './Elementos/useTaskManager';
+import Columna from './Columna';
+import reactLogo from './assets/react.svg';
+import viteLogo from '/vite.svg';
 import './App.css';
 
 function App() {
@@ -14,23 +16,14 @@ function App() {
 
   return (
     <>
-      <div className="parametros">
-        <h2 className='sub'>Idea <span>{count}</span></h2>
-        <input type="text" value={taskName} onChange={handleInputChange} placeholder="Nombre de la tarea" />
-        <button onClick={addTask} id='aggTarea'>+</button>
-        <div className="listas">
-          <ul>
-            {tasks.map(task => (
-              <li key={task.id}>
-                {task.name}
-                <button onClick={() => deleteTask(task.id)}>Borrar</button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      <div className="parametros"><h2 className='sub'>Iniciando</h2></div>
-      <div className="parametros"><h2 className='sub'>Finalizado</h2></div>
+      <Columna
+        count={count}
+        tasks={tasks}
+        taskName={taskName}
+        handleInputChange={handleInputChange}
+        addTask={addTask}
+        deleteTask={deleteTask}
+      />
     </>
   );
 }
