@@ -23,6 +23,10 @@ export const useTaskManager = () => {
     setCount(count - 1);
   };
 
+  function getStringValue(tasks: number): string {
+    return tasks.toString();
+  }
+
   return {
     count,
     tasks,
@@ -30,6 +34,7 @@ export const useTaskManager = () => {
     handleInputChange,
     addTask,
     deleteTask,
+    getStringValue,
   };
 };
 
