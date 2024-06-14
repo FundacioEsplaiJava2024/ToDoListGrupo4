@@ -23,8 +23,9 @@ export const useTaskManager = () => {
     setCount(count - 1);
   };
 
-  function getStringValue(tasks: number): string {
-    return tasks.toString();
+  function getStringValue(taskId: number): string {
+    taskId = Math.floor((Math.random() * 10000) + 1);
+    return taskId.toString();
   }
 
   return {
