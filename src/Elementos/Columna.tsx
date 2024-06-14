@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface ColumnaProps {
   count: number;
@@ -7,9 +7,25 @@ interface ColumnaProps {
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   addTask: () => void;
   deleteTask: (taskId: number) => void;
+  editTask: (taskId: number, newName: string) => void;
 }
 
-const Columna: React.FC<ColumnaProps> = ({ count, tasks, taskName, handleInputChange, addTask, deleteTask }) => {
+const Columna: React.FC<ColumnaProps> = ({ count, tasks, taskName, handleInputChange, addTask, deleteTask, editTask }) => {
+  const [editTaskId, setEditTaskId] = useState<number | null>(null);
+  const [editTaskName, setEditTaskName] = useState<string>('');
+
+  const handleEditInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditTaskName(event.target.value);
+  };
+
+  const handleSaveEdit = (taskId: number) => {
+    if (editTaskName.trim() !== '') {
+      editTask(taskId, editTaskName);
+      setEditTaskId(null);
+      setEditTaskName('');
+    }
+  };
+
   return (
     <>
       <div className="parametros">
@@ -20,15 +36,23 @@ const Columna: React.FC<ColumnaProps> = ({ count, tasks, taskName, handleInputCh
           <ul>
             {tasks.map(task => (
               <li key={task.id}>
-                {task.name}
-                <button onClick={() => deleteTask(task.id)}>Borrar</button>
+                {editTaskId === task.id ? (
+                  <>
+                    <input type="text" value={editTaskName} onChange={handleEditInputChange} />
+                    <button onClick={() => handleSaveEdit(task.id)}>Guardar</button>
+                  </>
+                ) : (
+                  <>
+                    {task.name}
+                    <button onClick={() => deleteTask(task.id)}>Borrar</button>
+                    <button onClick={() => { setEditTaskId(task.id); setEditTaskName(task.name); }}>Editar</button>
+                  </>
+                )}
               </li>
             ))}
           </ul>
         </div>
       </div>
-      <div className="parametros"><h2 className='sub'>Iniciando</h2></div>
-      <div className="parametros"><h2 className='sub'>Finalizado</h2></div>
     </>
   );
 };
