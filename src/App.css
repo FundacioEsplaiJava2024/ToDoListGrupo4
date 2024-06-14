@@ -1,12 +1,14 @@
 #root {
 
-    padding: 2rem;
+  padding: 2rem;
     text-align: center;
     display: flex;
     width: 80%;
     height: 100vh;
-    justify-content: space-around;
-    margin: 0  auto;
+    /* justify-content: space-around; */
+    margin: 0 auto;
+    flex-direction: column;
+
 }
 .logo {
   height: 6em;
@@ -42,6 +44,11 @@
 
 .read-the-docs {
   color: #888;
+}
+main{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
 }
 .parametros{
   border: 1px solid grey;

@@ -2,6 +2,8 @@ import React from 'react';
 import { useTaskManager } from './hook/useTaskManager';
 import './App.css';
 import Columna from './Elementos/tablero';
+import Header from './Elementos/header';
+import Aside from './Elementos/aside';
 
 const App: React.FC = () => {
   const {
@@ -16,6 +18,8 @@ const App: React.FC = () => {
 
   return (
     <>
+    <Header/>
+    <Aside/>
       <Columna
         count={count}
         tasks={tasks}
