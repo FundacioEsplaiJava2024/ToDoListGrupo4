@@ -1,10 +1,9 @@
+import React from 'react';
 import { useTaskManager } from './hook/useTaskManager';
-import Columna from './Elementos/tablero';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
 import './App.css';
+import Columna from './Elementos/Columna';
 
-function App() {
+const App: React.FC = () => {
   const {
     count,
     tasks,
@@ -12,6 +11,7 @@ function App() {
     handleInputChange,
     addTask,
     deleteTask,
+    editTask,
   } = useTaskManager();
 
   return (
@@ -23,6 +23,7 @@ function App() {
         handleInputChange={handleInputChange}
         addTask={addTask}
         deleteTask={deleteTask}
+        editTask={editTask}
       />
     </>
   );
