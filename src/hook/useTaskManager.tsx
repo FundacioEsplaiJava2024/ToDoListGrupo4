@@ -1,9 +1,14 @@
 import { useState } from 'react';
 
+interface Task {
+  id: number;
+  name: string;
+}
+
 export const useTaskManager = () => {
-  const [count, setCount] = useState(0);
-  const [tasks, setTasks] = useState([]);
-  const [taskName, setTaskName] = useState('');
+  const [count, setCount] = useState<number>(0);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [taskName, setTaskName] = useState<string>('');
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTaskName(event.target.value);
@@ -23,6 +28,13 @@ export const useTaskManager = () => {
     setCount(count - 1);
   };
 
+  const editTask = (taskId: number, newName: string) => {
+    const updatedTasks = tasks.map(task =>
+      task.id === taskId ? { ...task, name: newName } : task
+    );
+    setTasks(updatedTasks);
+  };
+
   return {
     count,
     tasks,
@@ -30,5 +42,6 @@ export const useTaskManager = () => {
     handleInputChange,
     addTask,
     deleteTask,
+    editTask,
   };
 };
