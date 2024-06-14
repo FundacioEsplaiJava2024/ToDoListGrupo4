@@ -10,19 +10,19 @@ interface ColumnaProps {
 }
 
   // Te permite agarrar el elementoDiv
-  const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
+  const handleDragStart = (event: React.DragEvent<HTMLElement>) => {
     event.dataTransfer.setData('text', event.currentTarget.id);
     event.dataTransfer.effectAllowed = "move";
   }
 
   // Evita que se pueda soltar en cualquier sitio
-  const enableDropping = (event: React.DragEvent<HTMLDivElement>) => {
+  const enableDropping = (event: React.DragEvent<HTMLElement>) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }
 
   // Termina de mover el div que se a agarrado previamente a otro sitio
-  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+  const handleDrop = (event: React.DragEvent<HTMLElement>) => {
     const id = event.dataTransfer.getData('text');
     event.currentTarget.appendChild(document.getElementById(id)!);
   }
@@ -30,14 +30,14 @@ interface ColumnaProps {
 const Columna: React.FC<ColumnaProps> = ({ count, tasks, taskName, handleInputChange, addTask, deleteTask }) => {
   return (
     <>
-      <div className="parametros"  onDragOver={enableDropping} onDrop={handleDrop}>
+      <div className="parametros" >
         <h2 className='sub'>Idea <span>{count}</span></h2>
         <input type="text" value={taskName} onChange={handleInputChange} placeholder="Nombre de la tarea" />
         <button onClick={addTask} id='aggTarea'>+</button>
-        <div className="listas"  id="01"  draggable="true" onDragStart={handleDragStart}>
-          <ul>
+        <div className="listas" >
+          <ul onDragOver={enableDropping} onDrop={handleDrop}>
             {tasks.map(task => (
-              <li key={task.id}>
+              <li key={task.id} draggable="true" onDragStart={handleDragStart} id="01" >
                 {task.name}
                 <button onClick={() => deleteTask(task.id)}>Borrar</button>
               </li>
@@ -45,8 +45,16 @@ const Columna: React.FC<ColumnaProps> = ({ count, tasks, taskName, handleInputCh
           </ul>
         </div>
       </div>
-      <div className="parametros"  onDragOver={enableDropping} onDrop={handleDrop}><h2 className='sub'>Iniciando</h2></div>
-      <div className="parametros"  onDragOver={enableDropping} onDrop={handleDrop}><h2 className='sub'>Finalizado</h2></div>
+      <div className="parametros" >
+        <ul onDragOver={enableDropping} onDrop={handleDrop}>
+        <li className='sub'>Iniciando</li>
+        </ul>
+        </div>
+      <div className="parametros" >
+        <ul onDragOver={enableDropping} onDrop={handleDrop}>
+        <h2 className='sub'>Finalizado</h2>
+        </ul>
+        </div>
     </>
   );
 };
