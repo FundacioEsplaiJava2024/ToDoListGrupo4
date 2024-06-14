@@ -1,5 +1,6 @@
 
 export interface ElementProps {
+    id: number;
     title: string
 }
 

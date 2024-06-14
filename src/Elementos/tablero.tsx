@@ -34,7 +34,7 @@ const Tablero: React.FC<TableroProps> = ({ count, tasks, taskName, handleInputCh
   return (
     <>
       <div className="parametros">
-        <h2 className='sub'>Idea <span>{count}</span></h2>
+        <h2 className='sub'>Idea <span className='contador'>{"Nº "+count}</span></h2>
         <input type="text" value={taskName} onChange={handleInputChange} placeholder="Nombre de la tarea" />
         <button onClick={addTask} id='aggTarea'>+</button>
         <div className="listas">

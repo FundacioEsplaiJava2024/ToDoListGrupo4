@@ -48,6 +48,9 @@
   width: 30%;
   border-radius: 10px;
 }
+.parametros h2 span{
+  font-size: 12px;
+}
 .sub{
   width: 80%;
   border-bottom: 1px solid gray;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTaskManager } from './hook/useTaskManager';
 import './App.css';
-import Columna from './Elementos/Tablero';
+import Columna from './Elementos/Columna';
 
 const App: React.FC = () => {
   const {
