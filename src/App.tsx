@@ -1,5 +1,5 @@
 import { useTaskManager } from './hook/useTaskManager';
-import Columna from './Elementos/Columna';
+import Columna from './Elementos/tablero';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
