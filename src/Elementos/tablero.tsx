@@ -46,13 +46,15 @@ const Columna: React.FC<ColumnaProps> = ({ count, tasks, taskName, handleInputCh
         </div>
       </div>
       <div className="parametros" >
+        <h2 className='sub'>Iniciando</h2>
         <ul onDragOver={enableDropping} onDrop={handleDrop}>
-        <li className='sub'>Iniciando</li>
+        <li></li>
         </ul>
         </div>
       <div className="parametros" >
-        <ul onDragOver={enableDropping} onDrop={handleDrop}>
         <h2 className='sub'>Finalizado</h2>
+        <ul onDragOver={enableDropping} onDrop={handleDrop}>
+        <li></li>
         </ul>
         </div>
     </>
