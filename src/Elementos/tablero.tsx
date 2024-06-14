@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-interface ColumnaProps {
+interface TableroProps {
   count: number;
   tasks: { id: number, name: string }[];
   taskName: string;
@@ -10,7 +10,7 @@ interface ColumnaProps {
   editTask: (taskId: number, newName: string) => void;
 }
 
-const Columna: React.FC<ColumnaProps> = ({ count, tasks, taskName, handleInputChange, addTask, deleteTask, editTask }) => {
+const Tablero: React.FC<TableroProps> = ({ count, tasks, taskName, handleInputChange, addTask, deleteTask, editTask }) => {
   const [editTaskId, setEditTaskId] = useState<number | null>(null);
   const [editTaskName, setEditTaskName] = useState<string>('');
 
@@ -63,4 +63,4 @@ const Columna: React.FC<ColumnaProps> = ({ count, tasks, taskName, handleInputCh
   );
 };
 
-export default Columna;
+export default Tablero;
