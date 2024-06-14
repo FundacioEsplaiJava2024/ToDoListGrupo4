@@ -1,4 +1,4 @@
-import { useTaskManager } from './hook/useTaskManager';
+import { useTaskManager, useTaskMove } from './hook/useTaskManager';
 import Columna from './Elementos/tablero';
 // import reactLogo from './assets/react.svg';
 // import viteLogo from '/vite.svg';
@@ -14,6 +14,12 @@ function App() {
     deleteTask,
   } = useTaskManager();
 
+  const {
+    handleDragStart,
+    enableDropping,
+    handleDrop,
+  } = useTaskMove();
+
   return (
     <>
       <Columna
@@ -23,6 +29,9 @@ function App() {
         handleInputChange={handleInputChange}
         addTask={addTask}
         deleteTask={deleteTask}
+        handleDragStart={handleDragStart}
+        enableDropping={enableDropping}
+        handleDrop={handleDrop}
       />
     </>
   );
