@@ -26,6 +26,11 @@ const Columna: React.FC<ColumnaProps> = ({ count, tasks, taskName, handleInputCh
     }
   };
 
+  const handleCancelEdit = () => {
+    setEditTaskId(null);
+    setEditTaskName('');
+  };
+
   return (
     <>
       <div className="parametros">
@@ -40,6 +45,7 @@ const Columna: React.FC<ColumnaProps> = ({ count, tasks, taskName, handleInputCh
                   <>
                     <input type="text" value={editTaskName} onChange={handleEditInputChange} />
                     <button onClick={() => handleSaveEdit(task.id)}>Guardar</button>
+                    <button onClick={handleCancelEdit}>Cancelar</button>
                   </>
                 ) : (
                   <>
