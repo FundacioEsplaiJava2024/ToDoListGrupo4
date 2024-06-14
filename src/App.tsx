@@ -1,23 +1,32 @@
-import { useState } from 'react'
-import './App.css'
+import React from 'react';
+import { useTaskManager } from './hook/useTaskManager';
+import './App.css';
+import Columna from './Elementos/Tablero';
 
-function App() {
-  const [count, setCount] = useState(0)
-  
+const App: React.FC = () => {
+  const {
+    count,
+    tasks,
+    taskName,
+    handleInputChange,
+    addTask,
+    deleteTask,
+    editTask,
+  } = useTaskManager();
 
   return (
     <>
-      <div className="parametros">
-        <h2 className='sub'>Idea</h2>
-        <button  id='aggTarea'><p className='agg'>+</p></button>
-        <div className="listas"></div>
-      </div>
-      
-      <div className="parametros" ><h2 className='sub'>Iniciando</h2></div>
-      <div className="parametros"><h2 className='sub'>Finalizado</h2></div>
-      
+      <Columna
+        count={count}
+        tasks={tasks}
+        taskName={taskName}
+        handleInputChange={handleInputChange}
+        addTask={addTask}
+        deleteTask={deleteTask}
+        editTask={editTask}
+      />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
