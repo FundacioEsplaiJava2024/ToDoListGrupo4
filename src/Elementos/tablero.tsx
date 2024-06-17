@@ -15,7 +15,7 @@ interface TableroProps {
 const Tablero: React.FC<TableroProps> = ({ count, tasks, taskName, handleInputChange, addTask, deleteTask, editTask }) => {
 
   return (
-    <div>
+    <div className='apartados'>
       <Columna
         count={count}
         tasks={tasks}
