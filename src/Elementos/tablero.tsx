@@ -7,7 +7,7 @@ import Columna from './Columna';
 interface TableroProps {
   count: number;
   tasks: { id: number, name: string }[];
-  addTask: () => void;
+  addTask: (taskName:string) => void;
   deleteTask: (taskId: number) => void;
   editTask: (taskId: number, newName: string) => void;
 }
@@ -15,7 +15,9 @@ interface TableroProps {
 const Tablero: React.FC<TableroProps> = ({ count, tasks, addTask, deleteTask, editTask }) => {
 
   return (
-    <Aside />
+    <>
+    <main>
+    <Aside/>
     <div className='apartados'>
       <Columna
         count={count}
@@ -25,6 +27,8 @@ const Tablero: React.FC<TableroProps> = ({ count, tasks, addTask, deleteTask, ed
         editTask={editTask}
       />
     </div>
+    </main>
+    </>
   );
 }
 

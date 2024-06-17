@@ -2,7 +2,7 @@ import React from 'react';
 import { useTaskManager } from './hook/useTaskManager';
 import './App.css';
 
-import Columna from './Elementos/tablero';
+import Tablero from './Elementos/tablero';
 import Header from './Elementos/header';
 import Footer from './Elementos/footer';
 import Aside from './Elementos/aside';
