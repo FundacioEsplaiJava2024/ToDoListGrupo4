@@ -12,6 +12,7 @@ function App() {
     handleInputChange,
     addTask,
     deleteTask,
+    updateID,
   } = useTaskManager();
 
   const {
@@ -32,6 +33,7 @@ function App() {
         handleDragStart={handleDragStart}
         enableDropping={enableDropping}
         handleDrop={handleDrop}
+        updateID={updateID}
       />
     </>
   );

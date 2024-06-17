@@ -23,6 +23,11 @@ export const useTaskManager = () => {
     setCount(count - 1);
   };
 
+  const updateID = (taskId: number) => {
+    const updateID = tasks.filter(task => task.id == taskId);
+    setTasks(updateID+1);
+  };
+
 
   return {
     count,
@@ -31,6 +36,7 @@ export const useTaskManager = () => {
     handleInputChange,
     addTask,
     deleteTask,
+    updateID,
   };
 };
 
