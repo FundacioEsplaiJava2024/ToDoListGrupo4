@@ -85,3 +85,7 @@ main{
 .container ul li a{
   color:black;
 }
+footer .Integrantes{
+  display:flex;
+  justify-content: space-around;
+}
