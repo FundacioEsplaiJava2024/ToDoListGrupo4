@@ -8,7 +8,6 @@ import AddColumn from './Elementos/AddColumn';
 
 const App: React.FC = () => {
   const {
-    count,
     columns,
     taskName,
     handleInputChange,
@@ -16,6 +15,8 @@ const App: React.FC = () => {
     deleteTask,
     editTask,
     addColumn,
+    deleteColumn,
+    editColumnName,
   } = useTaskManager();
 
   return (
@@ -32,6 +33,8 @@ const App: React.FC = () => {
             addTask={addTask}
             deleteTask={deleteTask}
             editTask={editTask}
+            deleteColumn={deleteColumn}
+            editColumnName={editColumnName}
           />
         ))}
       </div>
