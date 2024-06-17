@@ -3,6 +3,7 @@ import { useTaskManager } from './hook/useTaskManager';
 import './App.css';
 import Columna from './Elementos/tablero';
 import Header from './Elementos/header';
+import Footer from './Elementos/footer';
 import Aside from './Elementos/aside';
 
 const App: React.FC = () => {
@@ -18,7 +19,7 @@ const App: React.FC = () => {
 
   return (
     <>
-    <Header/>
+      <Header/>
       <Columna
         count={count}
         tasks={tasks}
@@ -28,6 +29,7 @@ const App: React.FC = () => {
         deleteTask={deleteTask}
         editTask={editTask}
       />
+      <Footer />
     </>
   );
 }
