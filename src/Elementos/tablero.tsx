@@ -1,4 +1,6 @@
+// tablero.tsx (o columna.tsx)
 import React, { useState } from 'react';
+import Aside from './aside';
 
 interface TableroProps {
   count: number;
@@ -32,36 +34,37 @@ const Tablero: React.FC<TableroProps> = ({ count, tasks, taskName, handleInputCh
   };
 
   return (
-    <>
     <main>
-      <div className="parametros">
-        <h2 className='sub'>Idea <span>{count}</span></h2>
-        <input type="text" value={taskName} onChange={handleInputChange} placeholder="Nombre de la tarea" />
-        <button onClick={addTask} id='aggTarea'>+</button>
-        <div className="listas">
-          <ul>
-            {tasks.map(task => (
-              <li key={task.id}>
-                {editTaskId === task.id ? (
-                  <>
-                    <input type="text" value={editTaskName} onChange={handleEditInputChange} />
-                    <button onClick={() => handleSaveEdit(task.id)}>Guardar</button>
-                    <button onClick={handleCancelEdit}>Cancelar</button>
-                  </>
-                ) : (
-                  <>
-                    {task.name}
-                    <button onClick={() => deleteTask(task.id)}>Borrar</button>
-                    <button onClick={() => { setEditTaskId(task.id); setEditTaskName(task.name); }}>Editar</button>
-                  </>
-                )}
-              </li>
-            ))}
-          </ul>
+      <Aside />
+      <div className="apartados">
+        <div className="parametros">
+          <h2 className='sub'>Idea <span>{count}</span></h2>
+          <input type="text" value={taskName} onChange={handleInputChange} placeholder="Nombre de la tarea" />
+          <button onClick={addTask} id='aggTarea'>+</button>
+          <div className="listas">
+            <ul>
+              {tasks.map(task => (
+                <li key={task.id}>
+                  {editTaskId === task.id ? (
+                    <>
+                      <input type="text" value={editTaskName} onChange={handleEditInputChange} />
+                      <button onClick={() => handleSaveEdit(task.id)}>Guardar</button>
+                      <button onClick={handleCancelEdit}>Cancelar</button>
+                    </>
+                  ) : (
+                    <>
+                      {task.name}
+                      <button onClick={() => deleteTask(task.id)}>Borrar</button>
+                      <button onClick={() => { setEditTaskId(task.id); setEditTaskName(task.name); }}>Editar</button>
+                    </>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
-      </main>
-    </>
+    </main>
   );
 };
 

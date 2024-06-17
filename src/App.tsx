@@ -19,7 +19,6 @@ const App: React.FC = () => {
   return (
     <>
     <Header/>
-    <Aside/>
       <Columna
         count={count}
         tasks={tasks}
