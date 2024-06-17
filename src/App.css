@@ -1,3 +1,4 @@
+
 #root {
 
   padding: 2rem;
@@ -52,11 +53,15 @@ main{
 }
 .apartados{
   width: 70%;
+  border: solid 1px grey;
+  padding: 30px;
+  height: 80vh;
 }
 .parametros{
   border: 1px solid grey;
   width: 30%;
   border-radius: 10px;
+  height: 75vh;
 }
 .sub{
   width: 80%;
@@ -74,4 +79,11 @@ main{
   font-size: 35px;
   font-weight: bold;
   margin: 0;
+}
+.container ul{
+  list-style: none;
+  text-align: left;
+}
+.container ul li a{
+  color:black;
 }
