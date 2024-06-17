@@ -7,8 +7,6 @@ const App: React.FC = () => {
   const {
     count,
     tasks,
-    taskName,
-    handleInputChange,
     addTask,
     deleteTask,
     editTask,
@@ -19,8 +17,6 @@ const App: React.FC = () => {
       <Tablero
         count={count}
         tasks={tasks}
-        taskName={taskName}
-        handleInputChange={handleInputChange}
         addTask={addTask}
         deleteTask={deleteTask}
         editTask={editTask}

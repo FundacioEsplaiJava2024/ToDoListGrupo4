@@ -8,16 +8,10 @@ interface Task {
 export const useTaskManager = () => {
   const [count, setCount] = useState<number>(0);
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [taskName, setTaskName] = useState<string>('');
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTaskName(event.target.value);
-  };
-
-  const addTask = () => {
+  const addTask = (taskName: string) => {
     if (taskName.trim() !== '') {
       setTasks([...tasks, { id: tasks.length + 1, name: taskName }]);
-      setTaskName('');
       setCount(count + 1);
     }
   };
@@ -38,8 +32,6 @@ export const useTaskManager = () => {
   return {
     count,
     tasks,
-    taskName,
-    handleInputChange,
     addTask,
     deleteTask,
     editTask,
