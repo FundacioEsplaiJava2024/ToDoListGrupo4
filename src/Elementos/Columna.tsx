@@ -1,4 +1,4 @@
-import { Elemento } from './Elemento';
+import Elemento from './Elemento';
 import { useState } from 'react';
 import { Task } from '../domain/Task';
 
@@ -7,8 +7,8 @@ export interface ColumnaProps {
   // agregarElemento: ()=>void,
   // elementos: Task[]
   count: number;
-  //tasks: { id: number, name: string }[];
-  tasks: Task[]
+  tasks: { id: number, name: string }[];
+  //tasks: Task[]
   taskName: string;
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   addTask: () => void;
@@ -44,20 +44,20 @@ function Columna({count, tasks, taskName, handleInputChange, addTask, deleteTask
         <button onClick={addTask} id='aggTarea'>+</button>
         <div className="listas"></div>
           <ul>
-            {tasks.map((elemento, index) => (
-              <li key={index}>
-                <Elemento id={index} title={elemento.title}/>
-                {editTaskId === index ? (
+            {tasks.map(task => (
+              <li key={task.id}>
+                <Elemento id={task.id} title={task.name}/>
+                {editTaskId === task.id ? (
                   <>
                     <input type="text" value={editTaskName} onChange={handleEditInputChange} />
-                    <button onClick={() => handleSaveEdit(index)}>Guardar</button>
+                    <button onClick={() => handleSaveEdit(task.id)}>Guardar</button>
                     <button onClick={handleCancelEdit}>Cancelar</button>
                   </>
                 ) : (
                   <>
-                    {elemento.title}
-                    <button onClick={() => deleteTask(index)}>Borrar</button>
-                    <button onClick={() => { setEditTaskId(index); setEditTaskName(elemento.title); }}>Editar</button>
+                    {task.name}
+                    <button onClick={() => deleteTask(task.id)}>Borrar</button>
+                    <button onClick={() => { setEditTaskId(task.id); setEditTaskName(task.name); }}>Editar</button>
                   </>
                 )}
               </li>

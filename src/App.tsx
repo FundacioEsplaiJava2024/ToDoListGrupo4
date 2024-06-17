@@ -1,8 +1,7 @@
+import React from 'react';
+import { useTaskManager } from './hook/useTaskManager';
 import './App.css';
-<<<<<<< HEAD
-import { App } from './main';
-=======
-import Columna from './Elementos/tablero';
+import Tablero from './Elementos/tablero';
 
 const App: React.FC = () => {
   const {
@@ -17,7 +16,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      <Columna
+      <Tablero
         count={count}
         tasks={tasks}
         taskName={taskName}
@@ -29,6 +28,5 @@ const App: React.FC = () => {
     </>
   );
 }
->>>>>>> fb133e662848cb211d8c3f76ef211878bf6c2b17
 
 export default App;

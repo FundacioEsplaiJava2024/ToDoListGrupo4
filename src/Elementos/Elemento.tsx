@@ -1,9 +1,12 @@
+import React from 'react';
 
-export interface ElementProps {
-    id: number;
-    title: string
+export interface ElementoProps {
+  id: number;
+  title: string;
 }
 
-export function Elemento({title} : ElementProps) {
-    return <li>{title}</li>
-}
+const Elemento: React.FC<ElementoProps> = ({ id, title }) => {
+  return <li>{title}</li>;
+};
+
+export default Elemento;
