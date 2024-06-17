@@ -43,10 +43,16 @@
 .read-the-docs {
   color: #888;
 }
+.apartados{
+  width: 70%;
+}
 .parametros{
   border: 1px solid grey;
   width: 30%;
   border-radius: 10px;
+}
+.parametros h2 span{
+  font-size: 12px;
 }
 .sub{
   width: 80%;
