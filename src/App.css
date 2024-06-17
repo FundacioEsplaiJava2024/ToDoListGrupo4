@@ -44,6 +44,7 @@
 .read-the-docs {
   color: #888;
 }
+
 main{
   width: 100%;
   display: flex;
@@ -54,12 +55,16 @@ main{
   border: solid 1px grey;
   padding: 30px;
   height: 80vh;
+
 }
 .parametros{
   border: 1px solid grey;
   width: 30%;
   border-radius: 10px;
   height: 75vh;
+}
+.parametros h2 span{
+  font-size: 12px;
 }
 .sub{
   width: 80%;
