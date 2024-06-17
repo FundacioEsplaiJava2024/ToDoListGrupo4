@@ -23,10 +23,6 @@ export const useTaskManager = () => {
     setCount(count - 1);
   };
 
-  function getStringValue(taskId: number): string {
-    taskId = Math.floor((Math.random() * 10000) + 1);
-    return taskId.toString();
-  }
 
   return {
     count,
@@ -35,7 +31,6 @@ export const useTaskManager = () => {
     handleInputChange,
     addTask,
     deleteTask,
-    getStringValue,
   };
 };
 

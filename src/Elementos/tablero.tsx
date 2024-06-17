@@ -10,9 +10,8 @@ interface ColumnaProps {
   handleDragStart: (event: React.DragEvent<HTMLElement>) => void;
   enableDropping: (event: React.DragEvent<HTMLElement>) => void;
   handleDrop: (event: React.DragEvent<HTMLElement>) => void;
-  getStringValue: (id: number) => string;
 }
-const Columna: React.FC<ColumnaProps> = ({ count, tasks, taskName, handleInputChange, addTask, deleteTask, handleDragStart, enableDropping, handleDrop, getStringValue }) => {
+const Columna: React.FC<ColumnaProps> = ({ count, tasks, taskName, handleInputChange, addTask, deleteTask, handleDragStart, enableDropping, handleDrop }) => {
   return (
     <>
       <div className="parametros" >
@@ -23,9 +22,9 @@ const Columna: React.FC<ColumnaProps> = ({ count, tasks, taskName, handleInputCh
           <ul onDragOver={enableDropping} onDrop={handleDrop}>
             <li className="nobullet"></li>
             {tasks.map(task => (
-              <li key={task.id} draggable="true" onDragStart={handleDragStart} id={getStringValue(task.id)} >
+              <li key={task.id} draggable="true" onDragStart={handleDragStart} id={task.id.toString()} >
                 {task.name}
-                <button onClick={() => deleteTask(task.id)}>Borrar</button>
+                <button onClick={() => deleteTask(task.id)} id='deleteTarea'>Borrar</button>
               </li>
             ))}
           </ul>
