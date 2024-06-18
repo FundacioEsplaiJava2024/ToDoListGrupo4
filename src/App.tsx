@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTaskManager } from './hook/useTaskManager';
 import './App.css';
+import './Elementos/fontAwesomeSetup';
+
 
 import Tablero from './Elementos/tablero';
 import Header from './Elementos/header';

@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { EditarIcono, BorrarIcono, GuardarIcono, CancelarIcono } from './iconos';
+
 
 export interface ElementoProps {
   id: number;
@@ -32,14 +35,23 @@ const Elemento: React.FC<ElementoProps> = ({ id, title, deleteTask, editTask }) 
       {isEditing ? (
         <>
           <input type="text" value={editTaskName} onChange={handleEditInputChange} />
-          <button onClick={handleSaveEdit}>Guardar</button>
-          <button onClick={handleCancelEdit}>Cancelar</button>
+          <div className="icons">
+            <span onClick={handleSaveEdit}><FontAwesomeIcon icon={GuardarIcono} /></span>
+            <span onClick={handleCancelEdit}><FontAwesomeIcon icon={CancelarIcono} /></span>
+          </div>
+          
         </>
       ) : (
         <>
+        <p>
           {title}
-          <button onClick={() => deleteTask(id)}>Borrar</button>
-          <button onClick={() => setIsEditing(true)}>Editar</button>
+        </p>
+          
+          <div className="icons">
+            <span onClick={() => deleteTask(id)}><FontAwesomeIcon icon={BorrarIcono} /></span>
+            <span onClick={() => setIsEditing(true)}><FontAwesomeIcon icon={EditarIcono} /></span>
+          </div>
+          
         </>
       )}
     </>

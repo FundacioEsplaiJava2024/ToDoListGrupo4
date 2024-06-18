@@ -29,7 +29,7 @@ const Columna: React.FC<ColumnaProps> = ({count, tasks, addTask, deleteTask, edi
         <h2 className='sub'>Columna <span className='contador'>{"Nº "+count}</span></h2>
         <input type="text" value={taskName} onChange={handleInputChange} placeholder="Nombre de la tarea" />
         <button onClick={handleAddTask} id='aggTarea'>+</button>
-        <div className="listas"></div>
+        <div className="listas">
           <ul>
             {tasks.map(task => (
               <li key={task.id}>
@@ -42,6 +42,7 @@ const Columna: React.FC<ColumnaProps> = ({count, tasks, addTask, deleteTask, edi
               </li>
             ))}
           </ul>
+        </div>
       </div>
     );
 }
