@@ -12,52 +12,14 @@ interface Column {
 }
 
 export const useTaskManager = () => {
-  const [columns, setColumns] = useState<Column[]>([]);
-  const [taskName, setTaskName] = useState<string>('');
+  const [count, setCount] = useState<number>(0);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTaskName(event.target.value);
-  };
-
-  const addTask = (columnId: number) => {
-    const newColumns = columns.map(column => {
-      if (column.id === columnId) {
-        const newTask = { id: column.tasks.length + 1, name: taskName };
-        return { ...column, tasks: [...column.tasks, newTask] };
-      }
-      return column;
-    });
-    setColumns(newColumns);
-    setTaskName('');
-  };
-
-  const deleteTask = (columnId: number, taskId: number) => {
-    const newColumns = columns.map(column => {
-      if (column.id === columnId) {
-        const updatedTasks = column.tasks.filter(task => task.id !== taskId);
-        return { ...column, tasks: updatedTasks };
-      }
-      return column;
-    });
-    setColumns(newColumns);
-  };
-
-  const editTask = (columnId: number, taskId: number, newName: string) => {
-    const newColumns = columns.map(column => {
-      if (column.id === columnId) {
-        const updatedTasks = column.tasks.map(task =>
-          task.id === taskId ? { ...task, name: newName } : task
-        );
-        return { ...column, tasks: updatedTasks };
-      }
-      return column;
-    });
-    setColumns(newColumns);
-  };
-
-  const addColumn = (name: string) => {
-    const newColumn = { id: columns.length + 1, name, tasks: [] };
-    setColumns([...columns, newColumn]);
+  const addTask = (taskName: string) => {
+    if (taskName.trim() !== '') {
+      setTasks([...tasks, { id: tasks.length + 1, name: taskName }]);
+      setCount(count + 1);
+    }
   };
 
   const deleteColumn = (columnId: number) => {
@@ -73,9 +35,9 @@ export const useTaskManager = () => {
   };
 
   return {
+    count,
+    tasks,
     columns,
-    taskName,
-    handleInputChange,
     addTask,
     deleteTask,
     editTask,

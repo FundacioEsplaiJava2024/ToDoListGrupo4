@@ -1,4 +1,8 @@
+// tablero.tsx (o columna.tsx)
 import React, { useState } from 'react';
+import Aside from './aside';
+import Columna from './Columna';
+
 
 interface Task {
   id: number;
@@ -12,45 +16,25 @@ interface Column {
 }
 
 interface TableroProps {
+
+  count: number;
+  tasks: { id: number, name: string }[];
+  addTask: (taskName:string) => void;
+  deleteTask: (taskId: number) => void;
+  editTask: (taskId: number, newName: string) => void;
   column: Column;
-  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  addTask: (columnId: number) => void;
-  deleteTask: (columnId: number, taskId: number) => void;
-  editTask: (columnId: number, taskId: number, newName: string) => void;
   deleteColumn: (columnId: number) => void;
   editColumnName: (columnId: number, newName: string) => void;
 }
 
-const Tablero: React.FC<TableroProps> = ({
+const Tablero: React.FC<TableroProps> = ({ count, tasks, addTask, deleteTask, editTask }) => {
   column,
-  handleInputChange,
-  addTask,
-  deleteTask,
-  editTask,
   deleteColumn,
   editColumnName,
-}) => {
-  const [editTaskId, setEditTaskId] = useState<number | null>(null);
-  const [editTaskName, setEditTaskName] = useState<string>('');
   const [editColumnNameState, setEditColumnNameState] = useState<boolean>(false);
   const [newColumnName, setNewColumnName] = useState<string>(column.name);
 
-  const handleEditInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditTaskName(event.target.value);
-  };
 
-  const handleSaveEdit = (taskId: number) => {
-    if (editTaskName.trim() !== '') {
-      editTask(column.id, taskId, editTaskName);
-      setEditTaskId(null);
-      setEditTaskName('');
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setEditTaskId(null);
-    setEditTaskName('');
-  };
 
   const handleColumnNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewColumnName(event.target.value);
@@ -64,51 +48,23 @@ const Tablero: React.FC<TableroProps> = ({
   };
 
   return (
-    <div className="parametros">
-      <h2 className='sub'>
-        {editColumnNameState ? (
-          <>
-            <input
-              type="text"
-              value={newColumnName}
-              onChange={handleColumnNameChange}
-            />
-            <span onClick={handleSaveColumnName} style={{ cursor: 'pointer', marginLeft: '5px' }}>💾</span>
-            <span onClick={() => setEditColumnNameState(false)} style={{ cursor: 'pointer', marginLeft: '5px' }}>❌</span>
-          </>
-        ) : (
-          <>
-            {column.name} <span>{column.tasks.length}</span>
-            <span onClick={() => setEditColumnNameState(true)} style={{ cursor: 'pointer', marginLeft: '5px' }}>✏️</span>
-            <span onClick={() => deleteColumn(column.id)} style={{ cursor: 'pointer', marginLeft: '5px' }}>🗑️</span>
-            <span onClick={() => addTask(column.id)} style={{ cursor: 'pointer', marginLeft: '5px' }}>➕</span>
-          </>
-        )}
-      </h2>
-      <input type="text" onChange={handleInputChange} placeholder="Nombre de la tarea" />
-      <div className="listas">
-        <ul>
-          {column.tasks.map(task => (
-            <li key={task.id}>
-              {editTaskId === task.id ? (
-                <>
-                  <input type="text" value={editTaskName} onChange={handleEditInputChange} />
-                  <button onClick={() => handleSaveEdit(task.id)}>Guardar</button>
-                  <button onClick={handleCancelEdit}>Cancelar</button>
-                </>
-              ) : (
-                <>
-                  {task.name}
-                  <button onClick={() => deleteTask(column.id, task.id)}>Borrar</button>
-                  <button onClick={() => { setEditTaskId(task.id); setEditTaskName(task.name); }}>Editar</button>
-                </>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
+
+    <>
+    <main>
+    <Aside/>
+    <div className='apartados'>
+      <Columna
+        count={count}
+        tasks={tasks}
+        addTask={addTask}
+        deleteTask={deleteTask}
+        editTask={editTask}
+      />
     </div>
+    </main>
+    </>
+
   );
-};
+}
 
 export default Tablero;

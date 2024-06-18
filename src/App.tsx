@@ -3,14 +3,17 @@ import { useTaskManager } from './hook/useTaskManager';
 import './App.css';
 import Tablero from './Elementos/tablero';
 import Header from './Elementos/header';
+import Footer from './Elementos/footer';
 import Aside from './Elementos/aside';
 import AddColumn from './Elementos/AddColumn';
 
 const App: React.FC = () => {
   const {
+    count,
+    tasks,
+
     columns,
-    taskName,
-    handleInputChange,
+
     addTask,
     deleteTask,
     editTask,
@@ -29,15 +32,18 @@ const App: React.FC = () => {
           <Tablero
             key={column.id}
             column={column}
-            handleInputChange={handleInputChange}
+            tasks={tasks}
             addTask={addTask}
             deleteTask={deleteTask}
             editTask={editTask}
             deleteColumn={deleteColumn}
             editColumnName={editColumnName}
+            count={count}
           />
+            <Footer/>
         ))}
       </div>
+
     </>
   );
 };
