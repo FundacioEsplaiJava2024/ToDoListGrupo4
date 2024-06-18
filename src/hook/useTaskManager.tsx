@@ -29,7 +29,7 @@ export const useTaskManager = () => {
     setTasks(updatedTasks);
   };
 
-    // Te permite agarrar el elementoDiv
+    // Te permite agarrar las Tasks
     const handleDragStart = (event: React.DragEvent<HTMLElement>) => {
       event.dataTransfer.setData('text', event.currentTarget.id);
       event.dataTransfer.effectAllowed = "move";
@@ -41,7 +41,7 @@ export const useTaskManager = () => {
       event.dataTransfer.dropEffect = "move";
     };
   
-    // Termina de mover el div que se a agarrado previamente a otro sitio
+    // Termina de mover las Tasks que se a agarrado previamente a otro sitio
     const handleDrop = (event: React.DragEvent<HTMLElement>) => {
       const id = event.dataTransfer.getData('text');
       event.currentTarget.appendChild(document.getElementById(id)!);
