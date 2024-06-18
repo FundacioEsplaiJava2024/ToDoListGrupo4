@@ -1,7 +1,16 @@
-
+body{
+  background-color: #242424;
+}
+h1, h2, h3, li{
+  color: #dcdcdc;
+}
+input[type="text" i] {
+  background-color: #3b3b3b;
+  height: 1.5rem;
+  width: 90%;
+  margin-top: 20px;
+}
 #root {
-
-  padding: 2rem;
     text-align: center;
     display: flex;
     width: 80%;
@@ -55,7 +64,7 @@ main{
   border: solid 1px grey;
   padding: 30px;
   height: 80vh;
-
+  box-shadow: 14px 15px 38px -11px rgba(105,96,105,1);
 }
 .parametros{
   border: 1px solid grey;
@@ -86,14 +95,66 @@ main{
   font-weight: bold;
   margin: 0;
 }
-.container ul{
+.listas ul{
   list-style: none;
-  text-align: left;
+  padding: 0;
+}
+.listas ul li{
+  width: 80%;
+  margin: 0  auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.listas ul li div.icons{
+    width: 30%;
+    display: flex;
+    justify-content: space-between;
+}
+.listas ul li div.icons span{
+  padding: 5px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+
+
+
+aside{
+  width: 20%;
+  border: 1px solid grey;
+  height: 75vh;
+}
+.container nav{
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 30px;
+}
+.container ul{
+    list-style: none;
+    text-align: left;
+    padding: 0;
+}
+.container ul li{
+  margin-bottom: 10px;
+  border-bottom: 1px solid gray;
+  display: flex;
 }
 .container ul li a{
-  color:black;
+    color: white;
+    width: 100%;
+    padding: 15px 0;
+}
+.container ul li a:hover{
+  font-size: 20px;
+  transition: ease .5s;
+}
+footer{
+  margin: 5rem 0 2rem 0;
 }
 footer .Integrantes{
+
   display:flex;
   justify-content: space-around;
+  box-shadow: 2px -6px 7px -1px rgba(105,96,105,1);
 }
