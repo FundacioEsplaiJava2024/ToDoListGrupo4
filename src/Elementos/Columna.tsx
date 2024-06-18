@@ -25,8 +25,6 @@ const Columna: React.FC<ColumnaProps> = ({
   nombre,
 }) => {
   const [taskName, setTaskName] = useState<string>('');
-  const [editColumnaName, setEditColumnaName] = useState<string>(nombre);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTaskName(event.target.value);
@@ -45,6 +43,9 @@ const Columna: React.FC<ColumnaProps> = ({
     }
   };
 
+  const [editColumnaName, setEditColumnaName] = useState<string>(nombre);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+
   const handleEditInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditColumnaName(event.target.value);
   };
@@ -59,6 +60,14 @@ const Columna: React.FC<ColumnaProps> = ({
   const handleCancelEdit = () => {
     setIsEditing(false);
     setEditColumnaName(nombre);
+  };
+
+  const handleDeleteTask = (taskId: number) => {
+    deleteTask(taskId);
+  };
+
+  const handleEditTask = (taskId: number, newName: string) => {
+    editTask(taskId, newName);
   };
 
   return (
@@ -93,8 +102,8 @@ const Columna: React.FC<ColumnaProps> = ({
               <Elemento
                 id={task.id}
                 title={task.name}
-                deleteTask={deleteTask}
-                editTask={editTask}
+                deleteTask={() => handleDeleteTask(task.id)}
+                editTask={(newName) => handleEditTask(task.id, newName)} 
               />
             </li>
           ))}
