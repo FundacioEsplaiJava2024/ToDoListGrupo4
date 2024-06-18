@@ -32,7 +32,7 @@ const Columna: React.FC<ColumnaProps> = ({count, tasks, addTask, deleteTask, edi
   return (
       <div className="parametros">
         <h2 className='sub'>Columna <span className='contador'>{"Nº "+count}</span></h2>
-        <input type="text" value={taskName} onChange={handleInputChange} placeholder="Nombre de la tarea" />
+        <input type="text" value={taskName} onChange={handleInputChange} id='inputTask' placeholder="Nombre de la tarea" />
         <button onClick={handleAddTask} id='aggTarea'>+</button>
         <div className="listas"></div>
           <ul onDragOver={enableDropping} onDrop={handleDrop}>

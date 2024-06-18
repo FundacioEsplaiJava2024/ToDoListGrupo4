@@ -1,4 +1,4 @@
-import { useTaskManager, useTaskMove } from './hook/useTaskManager';
+import { useTaskManager } from './hook/useTaskManager';
 import Columna from './Elementos/tablero';
 import React from 'react';
 import './App.css';
@@ -14,13 +14,10 @@ const App: React.FC = () => {
     addTask,
     deleteTask,
     editTask,
-  } = useTaskManager();
-
-  const {
     handleDragStart,
     enableDropping,
     handleDrop,
-  } = useTaskMove();
+  } = useTaskManager();
 
   return (
     <>
