@@ -1,6 +1,7 @@
 import Elemento from './Elemento';
 import { useState } from 'react';
 import { Task } from '../domain/Task';
+import { nanoid } from 'nanoid';
 
 export interface ColumnaProps {
   count: number;
@@ -8,10 +9,14 @@ export interface ColumnaProps {
   addTask: (taskName: string) => void;
   deleteTask: (taskId: number) => void;
   editTask: (taskId: number, newName: string) => void;
+  handleDragStart: (event: React.DragEvent<HTMLElement>) => void;
+  enableDropping: (event: React.DragEvent<HTMLElement>) => void;
+  handleDrop: (event: React.DragEvent<HTMLElement>) => void;
 }
 
-const Columna: React.FC<ColumnaProps> = ({count, tasks, addTask, deleteTask, editTask}) =>{
+const Columna: React.FC<ColumnaProps> = ({count, tasks, addTask, deleteTask, editTask, handleDragStart, enableDropping, handleDrop }) =>{
   const [taskName, setTaskName] = useState<string>('');
+  const generateUniqueId = (): string => nanoid();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTaskName(event.target.value);
@@ -30,9 +35,9 @@ const Columna: React.FC<ColumnaProps> = ({count, tasks, addTask, deleteTask, edi
         <input type="text" value={taskName} onChange={handleInputChange} placeholder="Nombre de la tarea" />
         <button onClick={handleAddTask} id='aggTarea'>+</button>
         <div className="listas"></div>
-          <ul>
+          <ul onDragOver={enableDropping} onDrop={handleDrop}>
             {tasks.map(task => (
-              <li key={task.id}>
+              <li key={task.id} draggable="true" onDragStart={handleDragStart} id={generateUniqueId()} >
                 <Elemento
                   id = {task.id}
                   title = {task.name}
