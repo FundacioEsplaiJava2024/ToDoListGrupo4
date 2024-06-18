@@ -5,6 +5,12 @@ interface Task {
   name: string;
 }
 
+interface Column {
+  id: number;
+  name: string;
+  tasks: Task[];
+}
+
 export const useTaskManager = () => {
   const [count, setCount] = useState<number>(0);
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -16,24 +22,27 @@ export const useTaskManager = () => {
     }
   };
 
-  const deleteTask = (taskId: number) => {
-    const updatedTasks = tasks.filter(task => task.id !== taskId);
-    setTasks(updatedTasks);
-    setCount(count - 1);
+  const deleteColumn = (columnId: number) => {
+    const updatedColumns = columns.filter(column => column.id !== columnId);
+    setColumns(updatedColumns);
   };
 
-  const editTask = (taskId: number, newName: string) => {
-    const updatedTasks = tasks.map(task =>
-      task.id === taskId ? { ...task, name: newName } : task
+  const editColumnName = (columnId: number, newName: string) => {
+    const updatedColumns = columns.map(column =>
+      column.id === columnId ? { ...column, name: newName } : column
     );
-    setTasks(updatedTasks);
+    setColumns(updatedColumns);
   };
 
   return {
     count,
     tasks,
+    columns,
     addTask,
     deleteTask,
     editTask,
+    addColumn,
+    deleteColumn,
+    editColumnName,
   };
 };
