@@ -1,29 +1,34 @@
+import React from 'react';
 import { useTaskManager } from './hook/useTaskManager';
-import Columna from './Elementos/tablero';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
 import './App.css';
 
-function App() {
+import Tablero from './Elementos/tablero';
+import Header from './Elementos/header';
+import Footer from './Elementos/footer';
+import Aside from './Elementos/aside';
+
+const App: React.FC = () => {
   const {
     count,
     tasks,
-    taskName,
-    handleInputChange,
     addTask,
     deleteTask,
+    editTask,
   } = useTaskManager();
 
   return (
     <>
-      <Columna
+      <Header/>
+
+      <Tablero
+
         count={count}
         tasks={tasks}
-        taskName={taskName}
-        handleInputChange={handleInputChange}
         addTask={addTask}
         deleteTask={deleteTask}
+        editTask={editTask}
       />
+      <Footer />
     </>
   );
 }

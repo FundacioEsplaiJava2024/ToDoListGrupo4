@@ -1,12 +1,13 @@
+
 #root {
 
-    padding: 2rem;
+  padding: 2rem;
     text-align: center;
     display: flex;
     width: 80%;
-    height: 100vh;
-    justify-content: space-around;
-    margin: 0  auto;
+    margin: 0 auto;
+    flex-direction: column;
+
 }
 .logo {
   height: 6em;
@@ -43,10 +44,27 @@
 .read-the-docs {
   color: #888;
 }
+
+main{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+.apartados{
+  width: 70%;
+  border: solid 1px grey;
+  padding: 30px;
+  height: 80vh;
+
+}
 .parametros{
   border: 1px solid grey;
   width: 30%;
   border-radius: 10px;
+  height: 75vh;
+}
+.parametros h2 span{
+  font-size: 12px;
 }
 .sub{
   width: 80%;
@@ -64,4 +82,15 @@
   font-size: 35px;
   font-weight: bold;
   margin: 0;
+}
+.container ul{
+  list-style: none;
+  text-align: left;
+}
+.container ul li a{
+  color:black;
+}
+footer .Integrantes{
+  display:flex;
+  justify-content: space-around;
 }
