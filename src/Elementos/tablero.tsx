@@ -6,7 +6,7 @@ interface TableroProps {
   tasks: { id: number; name: string }[];
   addTask: (taskName: string, columnaId: number) => void;
   deleteTask: (taskId: number, columnaId: number) => void;
-  editTask: (taskId: number, newName: string, columnaId: number) => void;
+  editTask: (taskId: number, newName: string) => void;
 }
 
 interface ColumnaData {
@@ -60,7 +60,7 @@ const Tablero: React.FC<TableroProps> = ({ count, tasks, addTask, deleteTask, ed
       } : col
     );
     setColumnas(nuevasColumnas);
-    editTask(taskId, newName, columnaId);
+    editTask(taskId, newName);
   };
 
   return (

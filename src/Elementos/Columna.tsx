@@ -103,7 +103,7 @@ const Columna: React.FC<ColumnaProps> = ({
                 id={task.id}
                 title={task.name}
                 deleteTask={() => handleDeleteTask(task.id)}
-                editTask={(newName) => handleEditTask(task.id, newName)} 
+                editTask={(count, newName) => handleEditTask(task.id, newName)} 
               />
             </li>
           ))}
