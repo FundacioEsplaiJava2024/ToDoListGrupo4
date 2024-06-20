@@ -6,17 +6,17 @@ import { faPlus, faEdit, faTrashAlt, faSave, faTimes } from '@fortawesome/free-s
 export interface ColumnaProps {
   count: number;
   tasks: { id: number; name: string }[];
+  name: string;//
   addTask: (taskName: string) => void;
   deleteTask: (taskId: number) => void;
   editTask: (taskId: number, newName: string) => void;
   eliminarColumna: () => void; //
   editarNombreColumna: (nuevoNombre: string) => void;//
-  nombre: string;//
 }
 
-const Columna: React.FC<ColumnaProps> = ({count, tasks, addTask, deleteTask, editTask, eliminarColumna, editarNombreColumna,nombre }) => {
+const Columna: React.FC<ColumnaProps> = ({count, tasks, name, addTask, deleteTask, editTask, eliminarColumna, editarNombreColumna }) => {
   const [taskName, setTaskName] = useState<string>('');
-  const [editColumnaName, setEditColumnaName] = useState<string>(nombre);
+  const [editColumnaName, setEditColumnaName] = useState<string>(name);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +49,7 @@ const Columna: React.FC<ColumnaProps> = ({count, tasks, addTask, deleteTask, edi
 
   const handleCancelEdit = () => {
     setIsEditing(false);
-    setEditColumnaName(nombre);
+    setEditColumnaName(name);
   };
 
   return (
@@ -63,14 +63,13 @@ const Columna: React.FC<ColumnaProps> = ({count, tasks, addTask, deleteTask, edi
           </>
         ) : (
           <>
-            <h2 className='sub'>{nombre}</h2>
+            <h2 className='sub'>{name}</h2>
             <button onClick={() => setIsEditing(true)}><FontAwesomeIcon icon={faEdit} /></button>
           </>
         )}
         <button onClick={eliminarColumna}><FontAwesomeIcon icon={faTrashAlt} /></button>
       </div>
       <input type="text" value={taskName} onChange={handleInputChange} onKeyPress={handleKeyPress} placeholder="Nombre de la tarea" />
-      <button onClick={handleAddTask}><FontAwesomeIcon icon={faPlus} /> Añadir Tarea</button>
       <div className="listas">
         <ul>
           {tasks.map(task => (
