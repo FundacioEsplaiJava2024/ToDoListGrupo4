@@ -9,22 +9,15 @@ export interface ColumnaProps {
   addTask: (taskName: string) => void;
   deleteTask: (taskId: number) => void;
   editTask: (taskId: number, newName: string) => void;
-  eliminarColumna: () => void;
-  editarNombreColumna: (nuevoNombre: string) => void;
-  nombre: string;
+  eliminarColumna: () => void; //
+  editarNombreColumna: (nuevoNombre: string) => void;//
+  nombre: string;//
 }
 
-const Columna: React.FC<ColumnaProps> = ({
-  count,
-  tasks,
-  addTask,
-  deleteTask,
-  editTask,
-  eliminarColumna,
-  editarNombreColumna,
-  nombre,
-}) => {
+const Columna: React.FC<ColumnaProps> = ({count, tasks, addTask, deleteTask, editTask, eliminarColumna, editarNombreColumna,nombre }) => {
   const [taskName, setTaskName] = useState<string>('');
+  const [editColumnaName, setEditColumnaName] = useState<string>(nombre);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTaskName(event.target.value);
@@ -43,9 +36,6 @@ const Columna: React.FC<ColumnaProps> = ({
     }
   };
 
-  const [editColumnaName, setEditColumnaName] = useState<string>(nombre);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-
   const handleEditInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditColumnaName(event.target.value);
   };
@@ -60,14 +50,6 @@ const Columna: React.FC<ColumnaProps> = ({
   const handleCancelEdit = () => {
     setIsEditing(false);
     setEditColumnaName(nombre);
-  };
-
-  const handleDeleteTask = (taskId: number) => {
-    deleteTask(taskId);
-  };
-
-  const handleEditTask = (taskId: number, newName: string) => {
-    editTask(taskId, newName);
   };
 
   return (
@@ -87,13 +69,7 @@ const Columna: React.FC<ColumnaProps> = ({
         )}
         <button onClick={eliminarColumna}><FontAwesomeIcon icon={faTrashAlt} /></button>
       </div>
-      <input
-        type="text"
-        value={taskName}
-        onChange={handleInputChange}
-        onKeyPress={handleKeyPress}
-        placeholder="Nombre de la tarea"
-      />
+      <input type="text" value={taskName} onChange={handleInputChange} onKeyPress={handleKeyPress} placeholder="Nombre de la tarea" />
       <button onClick={handleAddTask}><FontAwesomeIcon icon={faPlus} /> Añadir Tarea</button>
       <div className="listas">
         <ul>
@@ -102,8 +78,8 @@ const Columna: React.FC<ColumnaProps> = ({
               <Elemento
                 id={task.id}
                 title={task.name}
-                deleteTask={() => handleDeleteTask(task.id)}
-                editTask={(count, newName) => handleEditTask(task.id, newName)} 
+                deleteTask={deleteTask}
+                editTask={editTask} 
               />
             </li>
           ))}
