@@ -19,9 +19,9 @@ const Tablero: React.FC = () => {
       <main>
         <Aside />
         <div className='tablero'>
-          <h2 className='plus'><span onClick={() => addColumn(`Columna ${columns.length + 1}`)} className="add-column-btn">
+          <h2 className='plus'><button onClick={() => addColumn(`Columna ${columns.length + 1}`)} className="add-column-btn">
             +
-          </span></h2>
+          </button></h2>
           {columns.map((columna) => (
             <Columna
               key={columna.id}
