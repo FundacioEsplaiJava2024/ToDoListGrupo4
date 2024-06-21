@@ -58,16 +58,16 @@ const Columna: React.FC<ColumnaProps> = ({count, tasks, name, addTask, deleteTas
         {isEditing ? (
           <>
             <input type="text" value={editColumnaName} onChange={handleEditInputChange} />
-            <button onClick={handleSaveEdit}><FontAwesomeIcon icon={faSave} /></button>
-            <button onClick={handleCancelEdit}><FontAwesomeIcon icon={faTimes} /></button>
+            <span className='cssIcon' onClick={handleSaveEdit}><FontAwesomeIcon icon={faSave} /></span>
+            <span className='cssIcon' onClick={handleCancelEdit}><FontAwesomeIcon icon={faTimes} /></span>
           </>
         ) : (
           <>
             <h2 className='sub'>{name}</h2>
-            <button onClick={() => setIsEditing(true)}><FontAwesomeIcon icon={faEdit} /></button>
+            <span className='cssIcon' onClick={() => setIsEditing(true)}><FontAwesomeIcon icon={faEdit} /></span>
           </>
         )}
-        <button onClick={eliminarColumna}><FontAwesomeIcon icon={faTrashAlt} /></button>
+        <span className='cssIcon'onClick={eliminarColumna}><FontAwesomeIcon icon={faTrashAlt} /></span>
       </div>
       <input type="text" value={taskName} onChange={handleInputChange} onKeyPress={handleKeyPress} placeholder="Nombre de la tarea" />
       <div className="listas">
