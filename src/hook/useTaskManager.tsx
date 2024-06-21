@@ -70,8 +70,15 @@ export const useTaskManager = () => {
       const task = sourceColumn.tasks.find(task => task.id === taskId);
 
       if (task) {
-        deleteTask(sourceColId, taskId);
-        addTask(targetColId, task.name);
+        setColumns(columns.map(col => {
+          if (col.id === sourceColId) {
+            return { ...col, tasks: col.tasks.filter(task => task.id !== taskId)};
+          }
+          if (col.id === targetColId) {
+            return { ...col, tasks: [...col.tasks, task]};
+          }
+          return col;
+        }));
       }
     }
     console.log(sourceColId, targetColId, sourceColumn, targetColumn);
