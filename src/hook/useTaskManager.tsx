@@ -1,32 +1,66 @@
 import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Task {
   id: number;
   name: string;
 }
 
-export const useTaskManager = () => {
-  const [count, setCount] = useState<number>(0);
-  const [tasks, setTasks] = useState<Task[]>([]);
+interface Column {
+  id: string;
+  name: string;
+  tasks: Task[];
+}
 
-  const addTask = (taskName: string) => {
+export const useTaskManager = () => {
+  const [columns, setColumns] = useState<Column[]>([
+    { id: uuidv4(), name: 'Columna 1', tasks: [] },
+  ]);
+
+  const addTask = (columnaId: string, taskName: string) => {
     if (taskName.trim() !== '') {
-      setTasks([...tasks, { id: tasks.length + 1, name: taskName }]);
-      setCount(count + 1);
+      setColumns(columns.map(col =>
+        col.id === columnaId
+          ? { ...col, tasks: [...col.tasks, { id: col.tasks.length + 1, name: taskName }] }
+          : col
+      ));
     }
   };
 
-  const deleteTask = (taskId: number) => {
-    const updatedTasks = tasks.filter(task => task.id !== taskId);
-    setTasks(updatedTasks);
-    setCount(count - 1);
+  const deleteTask = (columnaId: string, taskId: number) => {
+    setColumns(columns.map(col =>
+      col.id === columnaId
+        ? { ...col, tasks: col.tasks.filter(task => task.id !== taskId) }
+        : col
+    ));
   };
 
-  const editTask = (taskId: number, newName: string) => {
-    const updatedTasks = tasks.map(task =>
-      task.id === taskId ? { ...task, name: newName } : task
-    );
-    setTasks(updatedTasks);
+  const editTask = (columnaId: string, taskId: number, newName: string) => {
+    setColumns(columns.map(col =>
+      col.id === columnaId
+        ? {
+          ...col,
+          tasks: col.tasks.map(task =>
+            task.id === taskId ? { ...task, name: newName } : task
+          )
+        }
+        : col
+    ));
+  };
+
+  const addColumn = (name: string) => {
+    const newColumn = { id: uuidv4(), name, tasks: [] };
+    setColumns([...columns, newColumn]);
+  };
+
+  const deleteColumn = (columnaId: string) => {
+    setColumns(columns.filter(col => col.id !== columnaId));
+  };
+
+  const editColumnName = (columnaId: string, newName: string) => {
+    setColumns(columns.map(col =>
+      col.id === columnaId ? { ...col, name: newName } : col
+    ));
   };
 
     // Te permite agarrar las Tasks
@@ -47,13 +81,16 @@ export const useTaskManager = () => {
     };
 
   return {
-    count,
-    tasks,
+    columns,
     addTask,
     deleteTask,
     editTask,
     handleDragStart,
     enableDropping,
     handleDrop,
+    addColumn,
+    deleteColumn,
+    editColumnName,
   };
 };
+

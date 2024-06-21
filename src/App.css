@@ -9,6 +9,7 @@ input[type="text" i] {
   height: 1.5rem;
   width: 90%;
   margin-top: 20px;
+  color: white;
 }
 #root {
     text-align: center;
@@ -46,6 +47,14 @@ input[type="text" i] {
   }
 }
 
+button{
+  padding: 5px;
+  width: 40px;
+  border-radius: 49%;
+  background-color: #1b1a1a;
+  color: white;
+}
+
 .card {
   padding: 2em;
 }
@@ -58,7 +67,40 @@ main{
   width: 100%;
   display: flex;
   justify-content: space-around;
+  box-shadow: 0px 7px 5px -1px rgba(105,96,105,1);
 }
+.tablero{
+  width: 70%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.tablero h2.plus{
+  text-align: start;
+    width: 100%;
+}
+
+.cssIcon{
+margin: 5px; 
+padding: 10px 5px;
+color: #dcdcdc;
+cursor: pointer;
+}
+
+.plus{
+cursor: pointer;
+transition: ease 0.5s;
+margin: 5px;
+margin-bottom: 15px;
+}
+
+
+
+.plus:hover{
+color: gray;
+}
+
+
+
 .apartados{
   width: 70%;
   border: solid 1px grey;
@@ -71,6 +113,8 @@ main{
   width: 30%;
   border-radius: 10px;
   height: 75vh;
+  margin-bottom: 15px;
+  margin-right: 32px;
 }
 .parametros h2 span{
   font-size: 12px;
@@ -79,10 +123,11 @@ main{
   list-style: none;
 }
 .sub{
-  width: 80%;
-  border-bottom: 1px solid gray;
-  margin: 0 auto;
-  margin-top: 20px;
+    width: 80%;
+    border-bottom: 1px solid gray;
+    margin: 0 auto;
+    padding: 10px 0;
+
 }
 #aggTarea{
   display: flex;
@@ -118,8 +163,6 @@ main{
 }
 
 
-
-
 aside{
   width: 20%;
   border: 1px solid grey;
@@ -148,6 +191,7 @@ aside{
 .container ul li a:hover{
   font-size: 20px;
   transition: ease .5s;
+  color: gray;
 }
 footer{
   margin: 5rem 0 2rem 0;
