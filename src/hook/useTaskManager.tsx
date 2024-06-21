@@ -47,8 +47,9 @@ export const useTaskManager = () => {
   };
 
   const addColumn = (name: string) => {
-    const newColumn = { id: uuidv4(), name, tasks: [] };
+    const newColumn = { id: name, name, tasks: [] };
     setColumns([...columns, newColumn]);
+    console.log(newColumn)
   };
 
   const deleteColumn = (columnaId: string) => {
@@ -73,6 +74,8 @@ export const useTaskManager = () => {
         addTask(targetColId, task.name);
       }
     }
+    console.log(sourceColId, targetColId, sourceColumn, targetColumn);
+    console.log(taskId)
   }
 
   return {
