@@ -20,7 +20,7 @@ export const useTaskManager = () => {
   const addTask = (columnaId: string, taskName: string) => {
     setColumns(columns.map(col =>
       col.id === columnaId
-        ? { ...col, tasks: [...col.tasks, { id: col.tasks.length + 1, name: taskName }] }
+        ? { ...col, tasks: [...col.tasks, { id: Math.random(), name: taskName }] }
         : col
     ));
   };
