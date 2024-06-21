@@ -19,6 +19,9 @@ const Tablero: React.FC = () => {
       <main>
         <Aside />
         <div className='tablero'>
+          <h2 className='plus'><span onClick={() => addColumn(`Columna ${columns.length + 1}`)} className="add-column-btn">
+            +
+          </span></h2>
           {columns.map((columna) => (
             <Columna
               key={columna.id}
@@ -32,9 +35,6 @@ const Tablero: React.FC = () => {
               editarNombreColumna={(nuevoNombre) => editColumnName(columna.id, nuevoNombre)}
             />
           ))}
-          <span onClick={() => addColumn(`Columna ${columns.length + 1}`)} className="add-column-btn">
-            Añadir Columna
-          </span>
         </div>
       </main>
     </>
@@ -42,4 +42,3 @@ const Tablero: React.FC = () => {
 };
 
 export default Tablero;
-

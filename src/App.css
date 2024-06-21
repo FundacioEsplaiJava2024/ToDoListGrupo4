@@ -9,6 +9,7 @@ input[type="text" i] {
   height: 1.5rem;
   width: 90%;
   margin-top: 20px;
+  color: white;
 }
 #root {
     text-align: center;
@@ -59,6 +60,15 @@ main{
   display: flex;
   justify-content: space-around;
 }
+.tablero{
+  width: 70%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.tablero h2.plus{
+  text-align: start;
+    width: 100%;
+}
 .apartados{
   width: 70%;
   border: solid 1px grey;
@@ -71,15 +81,18 @@ main{
   width: 30%;
   border-radius: 10px;
   height: 75vh;
+  margin-bottom: 15px;
+  margin-right: 32px;
 }
 .parametros h2 span{
   font-size: 12px;
 }
 .sub{
-  width: 80%;
-  border-bottom: 1px solid gray;
-  margin: 0 auto;
-  margin-top: 20px;
+    width: 80%;
+    border-bottom: 1px solid gray;
+    margin: 0 auto;
+    padding: 10px 0;
+
 }
 #aggTarea{
   display: flex;
@@ -145,6 +158,7 @@ aside{
 .container ul li a:hover{
   font-size: 20px;
   transition: ease .5s;
+  color: gray;
 }
 footer{
   margin: 5rem 0 2rem 0;
@@ -154,37 +168,4 @@ footer .Integrantes{
   display:flex;
   justify-content: space-around;
   box-shadow: 2px -6px 7px -1px rgba(105,96,105,1);
-}
-.tablero {
-  display: flex;
-  gap: 10px;
-  padding: 10px;
-  overflow-x: auto;
-}
-.sub {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.sub input {
-  margin-left: 10px;
-}
-button {
-  margin: 5px;
-  padding: 5px 10px;
-  border: none;
-  background-color: #007BFF;
-  color: white;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-.add-column-btn {
-  align-self: center;
-  height: 40px;
 }
