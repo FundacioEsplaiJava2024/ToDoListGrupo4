@@ -38,7 +38,6 @@ export const useTaskManager = () => {
     // Evita que se pueda soltar en cualquier sitio
     const enableDropping = (event: React.DragEvent<HTMLElement>) => {
       event.preventDefault();
-      event.dataTransfer.dropEffect = "move";
     };
   
     // Termina de mover las Tasks que se a agarrado previamente a otro sitio
