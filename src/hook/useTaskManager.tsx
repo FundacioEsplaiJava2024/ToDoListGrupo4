@@ -63,6 +63,9 @@ export const useTaskManager = () => {
   };
 
   const moveTask = (taskId: number, sourceColId: string, targetColId: string) => {
+    if (sourceColId === targetColId){
+      return;
+    }
     const sourceColumn = columns.find(col => col.id === sourceColId);
     const targetColumn = columns.find(col => col.id === targetColId);
 
