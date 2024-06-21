@@ -18,13 +18,11 @@ export const useTaskManager = () => {
   ]);
 
   const addTask = (columnaId: string, taskName: string) => {
-    if (taskName.trim() !== '') {
-      setColumns(columns.map(col =>
-        col.id === columnaId
-          ? { ...col, tasks: [...col.tasks, { id: col.tasks.length + 1, name: taskName }] }
-          : col
-      ));
-    }
+    setColumns(columns.map(col =>
+      col.id === columnaId
+        ? { ...col, tasks: [...col.tasks, { id: col.tasks.length + 1, name: taskName }] }
+        : col
+    ));
   };
 
   const deleteTask = (columnaId: string, taskId: number) => {
@@ -63,34 +61,29 @@ export const useTaskManager = () => {
     ));
   };
 
-    // Te permite agarrar las Tasks
-    const handleDragStart = (event: React.DragEvent<HTMLElement>) => {
-      event.dataTransfer.setData('text', event.currentTarget.id);
-      event.dataTransfer.effectAllowed = "move";
-    };
-  
-    // Evita que se pueda soltar en cualquier sitio
-    const enableDropping = (event: React.DragEvent<HTMLElement>) => {
-      event.preventDefault();
-    };
-  
-    // Termina de mover las Tasks que se a agarrado previamente a otro sitio
-    const handleDrop = (event: React.DragEvent<HTMLElement>) => {
-      const id = event.dataTransfer.getData('text');
-      event.currentTarget.appendChild(document.getElementById(id)!);
-    };
+  const moveTask = (taskId: number, sourceColId: string, targetColId: string) => {
+    const sourceColumn = columns.find(col => col.id === sourceColId);
+    const targetColumn = columns.find(col => col.id === targetColId);
+
+    if (sourceColumn && targetColumn) {
+      const task = sourceColumn.tasks.find(task => task.id === taskId);
+
+      if (task) {
+        deleteTask(sourceColId, taskId);
+        addTask(targetColId, task.name);
+      }
+    }
+  }
 
   return {
     columns,
     addTask,
     deleteTask,
     editTask,
-    handleDragStart,
-    enableDropping,
-    handleDrop,
     addColumn,
     deleteColumn,
     editColumnName,
+    moveTask,
   };
 };
 

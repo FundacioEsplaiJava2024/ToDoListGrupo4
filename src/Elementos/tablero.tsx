@@ -12,9 +12,7 @@ const Tablero: React.FC = () => {
     addColumn,
     deleteColumn,
     editColumnName,
-    enableDropping,
-    handleDragStart,
-    handleDrop,
+    moveTask,
   } = useTaskManager();
 
   return (
@@ -36,6 +34,7 @@ const Tablero: React.FC = () => {
               editTask={(taskId, newName) => editTask(columna.id, taskId, newName)}
               eliminarColumna={() => deleteColumn(columna.id)}
               editarNombreColumna={(nuevoNombre) => editColumnName(columna.id, nuevoNombre)}
+              moveTask={moveTask}
             />
           ))}
         </div>

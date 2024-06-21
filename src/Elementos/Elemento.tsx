@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { EditarIcono, BorrarIcono, GuardarIcono, CancelarIcono } from './iconos';
-
+import { useDrag } from 'react-dnd';
+import { ItemTypes } from './ItemTypes';
 
 export interface ElementoProps {
   id: number;
   title: string;
   deleteTask: (taskId: number) => void;
   editTask: (taskId: number, newName: string) => void;
+  sourceColId: string;
 }
 
-const Elemento: React.FC<ElementoProps> = ({ id, title, deleteTask, editTask }) => {
+const Elemento: React.FC<ElementoProps> = ({ id, title, deleteTask, editTask, sourceColId }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editTaskName, setEditTaskName] = useState<string>(title);
 
@@ -30,8 +32,20 @@ const Elemento: React.FC<ElementoProps> = ({ id, title, deleteTask, editTask }) 
     setEditTaskName(title);
   };
 
+  const [{isDragging}, drag] = useDrag(() => ({
+    type: ItemTypes.TaskM,
+    item: {id, sourceColId},
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  }), [id]);
+
+  const taskStyle = {
+    opacity: isDragging ? 0.5 : 1,
+  };
+
   return (
-    <>
+    <li ref={drag} style={taskStyle}>
       {isEditing ? (
         <>
           <input type="text" value={editTaskName} onChange={handleEditInputChange} />
@@ -54,7 +68,7 @@ const Elemento: React.FC<ElementoProps> = ({ id, title, deleteTask, editTask }) 
           
         </>
       )}
-    </>
+    </li>
   );
 };
 

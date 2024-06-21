@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import Elemento from './Elemento';
 import { Task } from '../domain/Task';
-import { nanoid } from 'nanoid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrashAlt, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { useDrop } from 'react-dnd';
+import { ItemTypes } from './ItemTypes';
 
 export interface ColumnaProps {
   count: number;
@@ -12,18 +13,15 @@ export interface ColumnaProps {
   addTask: (taskName: string) => void;
   deleteTask: (taskId: number) => void;
   editTask: (taskId: number, newName: string) => void;
-  handleDragStart: (event: React.DragEvent<HTMLElement>) => void;
-  enableDropping: (event: React.DragEvent<HTMLElement>) => void;
-  handleDrop: (event: React.DragEvent<HTMLElement>) => void;
   eliminarColumna: () => void; //
   editarNombreColumna: (nuevoNombre: string) => void;//
+  moveTask: (taskId: number, sourceColId: string, targetColId: string) => void;
 }
 
-const Columna: React.FC<ColumnaProps> = ({count, tasks, name, addTask, deleteTask, editTask, eliminarColumna, editarNombreColumna, handleDragStart, enableDropping, handleDrop  }) => {
+const Columna: React.FC<ColumnaProps> = ({ count, tasks, name, addTask, deleteTask, editTask, eliminarColumna, editarNombreColumna, moveTask }) => {
   const [taskName, setTaskName] = useState<string>('');
   const [editColumnaName, setEditColumnaName] = useState<string>(name);
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const generateUniqueId = (): string => nanoid();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTaskName(event.target.value);
@@ -58,8 +56,15 @@ const Columna: React.FC<ColumnaProps> = ({count, tasks, name, addTask, deleteTas
     setEditColumnaName(name);
   };
 
+  const [, drop] = useDrop({
+    accept: ItemTypes.TaskM,
+    drop: (item: { id: number; sourceColId: string}, monitor) => {
+      const targetColId = name;
+      moveTask(item.id, item.sourceColId, targetColId);
+    },
+  });
   return (
-    <div className="parametros">
+    <div ref={drop} className="parametros">
       <div className="column-header">
         {isEditing ? (
           <>
@@ -73,20 +78,20 @@ const Columna: React.FC<ColumnaProps> = ({count, tasks, name, addTask, deleteTas
             <span className='cssIcon' onClick={() => setIsEditing(true)}><FontAwesomeIcon icon={faEdit} /></span>
           </>
         )}
-        <span className='cssIcon'onClick={eliminarColumna}><FontAwesomeIcon icon={faTrashAlt} /></span>
+        <span className='cssIcon' onClick={eliminarColumna}><FontAwesomeIcon icon={faTrashAlt} /></span>
       </div>
       <input type="text" value={taskName} onChange={handleInputChange} onKeyPress={handleKeyPress} placeholder="Nombre de la tarea" />
       <div className="listas">
-        <ul onDragOver={enableDropping} onDrop={handleDrop}>
+        <ul>
           {tasks.map(task => (
-            <li key={task.id}  onDragStart={handleDragStart}>
-              <Elemento
-                id={task.id}
-                title={task.name}
-                deleteTask={deleteTask}
-                editTask={editTask} 
-              />
-            </li>
+            <Elemento
+              key={task.id}
+              id={task.id}
+              title={task.name}
+              deleteTask={deleteTask}
+              editTask={editTask}
+              sourceColId={name}
+            />
           ))}
         </ul>
       </div>
