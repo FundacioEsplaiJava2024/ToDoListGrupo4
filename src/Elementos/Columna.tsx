@@ -11,6 +11,7 @@ export interface ColumnaProps {
   count: number;
   tasks: { id: string; name: string }[];
   name: string;//
+  columnId: string;
   addTask: (taskName: string) => void;
   deleteTask: (taskId: string) => void;
   editTask: (taskId: string, newName: string) => void;
@@ -19,7 +20,7 @@ export interface ColumnaProps {
   moveTask: (taskId: string, sourceColId: string, targetColId: string) => void;
 }
 
-const Columna: React.FC<ColumnaProps> = ({ count, tasks, name, addTask, deleteTask, editTask, eliminarColumna, editarNombreColumna, moveTask }) => {
+const Columna: React.FC<ColumnaProps> = ({ count, tasks, name, columnId, addTask, deleteTask, editTask, eliminarColumna, editarNombreColumna, moveTask }) => {
   const [taskName, setTaskName] = useState<string>('');
   const [editColumnaName, setEditColumnaName] = useState<string>(name);
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -59,10 +60,10 @@ const Columna: React.FC<ColumnaProps> = ({ count, tasks, name, addTask, deleteTa
 
   const [, drop] = useDrop({
     accept: ItemTypes.TaskM,
-    drop: (item: { id: string; sourceColId: string}, monitor) => {
-      const targetColId = uuidv4(); //stá mal
+    drop: (item: { id: string; sourceColId: string}) => {
+      const targetColId = columnId; //stá mal
       moveTask(item.id, item.sourceColId, targetColId);
-      console.log(item.id, item.sourceColId, targetColId);
+      console.log("Itemid",item.id, "Item sourceCol id",item.sourceColId, "targedcol ID",targetColId);
     },
   });
   return (
@@ -92,7 +93,7 @@ const Columna: React.FC<ColumnaProps> = ({ count, tasks, name, addTask, deleteTa
               title={task.name}
               deleteTask={deleteTask}
               editTask={editTask}
-              sourceColId={name}
+              sourceColId={columnId}
             />
           ))}
         </ul>

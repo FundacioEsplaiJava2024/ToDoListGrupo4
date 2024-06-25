@@ -84,7 +84,10 @@ export const useTaskManager = () => {
         }));
       }
     }
-    console.log(sourceColId, targetColId, sourceColumn, targetColumn);
+    console.log("target"+ targetColumn);
+    console.log("sourse id"+sourceColId);
+    console.log("target id"+targetColId);
+    console.log("sourse"+sourceColumn);
     console.log(taskId)
   }
 

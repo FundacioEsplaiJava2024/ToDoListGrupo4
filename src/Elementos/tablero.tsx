@@ -29,6 +29,7 @@ const Tablero: React.FC = () => {
               count={columna.tasks.length}
               tasks={columna.tasks}
               name={columna.name}
+              columnId={columna.id}
               addTask={(taskName) => addTask(columna.id, taskName)}
               deleteTask={(taskId) => deleteTask(columna.id, taskId)}
               editTask={(taskId, newName) => editTask(columna.id, taskId, newName)}

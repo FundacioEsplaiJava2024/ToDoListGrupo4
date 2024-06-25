@@ -38,7 +38,8 @@ const Elemento: React.FC<ElementoProps> = ({ id, title, deleteTask, editTask, so
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
-  }), [id]);
+  }), [id])
+  console.log("LALALLALA ITEM ID ",id," LALAL SOURCECOLID ",sourceColId);;
 
   const taskStyle = {
     opacity: isDragging ? 0.5 : 1,
