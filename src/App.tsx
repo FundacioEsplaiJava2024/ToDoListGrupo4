@@ -1,5 +1,3 @@
-import { useTaskManager } from './hook/useTaskManager';
-import Columna from './Elementos/tablero';
 import React from 'react';
 import './App.css';
 import './Elementos/fontAwesomeSetup';

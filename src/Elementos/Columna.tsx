@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import Elemento from './Elemento';
-import { Task } from '../domain/Task';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faEdit, faTrashAlt, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useDrop } from 'react-dnd';
 import { ItemTypes } from './ItemTypes';
-import { v4 as uuidv4 } from 'uuid';
 
 export interface ColumnaProps {
   count: number;
@@ -20,7 +18,7 @@ export interface ColumnaProps {
   moveTask: (taskId: string, sourceColId: string, targetColId: string) => void;
 }
 
-const Columna: React.FC<ColumnaProps> = ({ count, tasks, name, columnId, addTask, deleteTask, editTask, eliminarColumna, editarNombreColumna, moveTask }) => {
+const Columna: React.FC<ColumnaProps> = ({ tasks, name, columnId, addTask, deleteTask, editTask, eliminarColumna, editarNombreColumna, moveTask }) => {
   const [taskName, setTaskName] = useState<string>('');
   const [editColumnaName, setEditColumnaName] = useState<string>(name);
   const [isEditing, setIsEditing] = useState<boolean>(false);
