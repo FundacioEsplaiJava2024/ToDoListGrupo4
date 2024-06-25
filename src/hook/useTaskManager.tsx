@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Task } from '../domain/Task'
+import { TodoistApi } from '@doist/todoist-api-typescript';
+const api = new TodoistApi("119851f333e3b56540f44a073814b5b44fe00f25");
 
 interface Column {
   id: string;
@@ -9,9 +11,23 @@ interface Column {
 }
 
 export const useTaskManager = () => {
+  const [projectId, setProjectId] = useState<string | null>(null);
   const [columns, setColumns] = useState<Column[]>([
     { id: uuidv4(), name: 'Columna 1', tasks: [] },
   ]);
+  useEffect(() => {
+    const createProject = async () => {
+      try {
+        const project = await api.addProject({ name: 'Nuevo Proyecto' });
+        setProjectId(project.id);
+        setColumns([{ id: project.id, name: project.name, tasks: [] }]);
+      } catch (error) {
+        console.error('Error creando el proyecto:', error);
+      }
+    };
+
+    createProject();
+  }, []);
 
   const addTask = (columnaId: string, taskName: string) => {
     setColumns(columns.map(col =>
