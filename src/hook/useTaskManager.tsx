@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 interface Task {
-  id: number;
+  id: string;
   name: string;
 }
 
@@ -20,12 +20,12 @@ export const useTaskManager = () => {
   const addTask = (columnaId: string, taskName: string) => {
     setColumns(columns.map(col =>
       col.id === columnaId
-        ? { ...col, tasks: [...col.tasks, { id: Math.random(), name: taskName }] }
+        ? { ...col, tasks: [...col.tasks, { id: uuidv4(), name: taskName }] }
         : col
     ));
   };
 
-  const deleteTask = (columnaId: string, taskId: number) => {
+  const deleteTask = (columnaId: string, taskId: string) => {
     setColumns(columns.map(col =>
       col.id === columnaId
         ? { ...col, tasks: col.tasks.filter(task => task.id !== taskId) }
@@ -33,7 +33,7 @@ export const useTaskManager = () => {
     ));
   };
 
-  const editTask = (columnaId: string, taskId: number, newName: string) => {
+  const editTask = (columnaId: string, taskId: string, newName: string) => {
     setColumns(columns.map(col =>
       col.id === columnaId
         ? {
@@ -47,7 +47,7 @@ export const useTaskManager = () => {
   };
 
   const addColumn = (name: string) => {
-    const newColumn = { id: name, name, tasks: [] };
+    const newColumn = { id: uuidv4(), name, tasks: [] };
     setColumns([...columns, newColumn]);
     console.log(newColumn)
   };
@@ -62,13 +62,13 @@ export const useTaskManager = () => {
     ));
   };
 
-  const moveTask = (taskId: number, sourceColId: string, targetColId: string) => {
+  const moveTask = (taskId: string, sourceColId: string, targetColId: string) => {
     if (sourceColId === targetColId){
       return;
     }
     const sourceColumn = columns.find(col => col.id === sourceColId);
     const targetColumn = columns.find(col => col.id === targetColId);
-
+    
     if (sourceColumn && targetColumn) {
       const task = sourceColumn.tasks.find(task => task.id === taskId);
 

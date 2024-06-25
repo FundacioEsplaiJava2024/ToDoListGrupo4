@@ -5,17 +5,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrashAlt, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useDrop } from 'react-dnd';
 import { ItemTypes } from './ItemTypes';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface ColumnaProps {
   count: number;
-  tasks: { id: number; name: string }[];
+  tasks: { id: string; name: string }[];
   name: string;//
   addTask: (taskName: string) => void;
-  deleteTask: (taskId: number) => void;
-  editTask: (taskId: number, newName: string) => void;
+  deleteTask: (taskId: string) => void;
+  editTask: (taskId: string, newName: string) => void;
   eliminarColumna: () => void; //
   editarNombreColumna: (nuevoNombre: string) => void;//
-  moveTask: (taskId: number, sourceColId: string, targetColId: string) => void;
+  moveTask: (taskId: string, sourceColId: string, targetColId: string) => void;
 }
 
 const Columna: React.FC<ColumnaProps> = ({ count, tasks, name, addTask, deleteTask, editTask, eliminarColumna, editarNombreColumna, moveTask }) => {
@@ -58,9 +59,10 @@ const Columna: React.FC<ColumnaProps> = ({ count, tasks, name, addTask, deleteTa
 
   const [, drop] = useDrop({
     accept: ItemTypes.TaskM,
-    drop: (item: { id: number; sourceColId: string}, monitor) => {
-      const targetColId = name;
+    drop: (item: { id: string; sourceColId: string}, monitor) => {
+      const targetColId = uuidv4(); //stá mal
       moveTask(item.id, item.sourceColId, targetColId);
+      console.log(item.id, item.sourceColId, targetColId);
     },
   });
   return (

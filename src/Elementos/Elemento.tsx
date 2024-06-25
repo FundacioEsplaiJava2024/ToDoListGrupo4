@@ -5,10 +5,10 @@ import { useDrag } from 'react-dnd';
 import { ItemTypes } from './ItemTypes';
 
 export interface ElementoProps {
-  id: number;
+  id: string;
   title: string;
-  deleteTask: (taskId: number) => void;
-  editTask: (taskId: number, newName: string) => void;
+  deleteTask: (taskId: string) => void;
+  editTask: (taskId: string, newName: string) => void;
   sourceColId: string;
 }
 
