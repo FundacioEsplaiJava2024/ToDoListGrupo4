@@ -1,10 +1,6 @@
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-
-interface Task {
-  id: number;
-  name: string;
-}
+import { Task } from '../domain/Task'
 
 interface Column {
   id: string;
@@ -18,16 +14,14 @@ export const useTaskManager = () => {
   ]);
 
   const addTask = (columnaId: string, taskName: string) => {
-    if (taskName.trim() !== '') {
-      setColumns(columns.map(col =>
-        col.id === columnaId
-          ? { ...col, tasks: [...col.tasks, { id: col.tasks.length + 1, name: taskName }] }
-          : col
-      ));
-    }
+    setColumns(columns.map(col =>
+      col.id === columnaId
+        ? { ...col, tasks: [...col.tasks, { id: uuidv4(), name: taskName }] }
+        : col
+    ));
   };
 
-  const deleteTask = (columnaId: string, taskId: number) => {
+  const deleteTask = (columnaId: string, taskId: string) => {
     setColumns(columns.map(col =>
       col.id === columnaId
         ? { ...col, tasks: col.tasks.filter(task => task.id !== taskId) }
@@ -35,7 +29,7 @@ export const useTaskManager = () => {
     ));
   };
 
-  const editTask = (columnaId: string, taskId: number, newName: string) => {
+  const editTask = (columnaId: string, taskId: string, newName: string) => {
     setColumns(columns.map(col =>
       col.id === columnaId
         ? {
@@ -63,6 +57,30 @@ export const useTaskManager = () => {
     ));
   };
 
+  const moveTask = (taskId: string, sourceColId: string, targetColId: string) => {
+    if (sourceColId === targetColId){
+      return;
+    }
+    const sourceColumn = columns.find(col => col.id === sourceColId);
+    const targetColumn = columns.find(col => col.id === targetColId);
+    
+    if (sourceColumn && targetColumn) {
+      const task = sourceColumn.tasks.find(task => task.id === taskId);
+
+      if (task) {
+        setColumns(columns.map(col => {
+          if (col.id === sourceColId) {
+            return { ...col, tasks: col.tasks.filter(task => task.id !== taskId)};
+          }
+          if (col.id === targetColId) {
+            return { ...col, tasks: [...col.tasks, task]};
+          }
+          return col;
+        }));
+      }
+    }
+  }
+
   return {
     columns,
     addTask,
@@ -71,6 +89,7 @@ export const useTaskManager = () => {
     addColumn,
     deleteColumn,
     editColumnName,
+    moveTask,
   };
 };
 

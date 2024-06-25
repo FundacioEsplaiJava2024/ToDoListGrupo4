@@ -47,14 +47,6 @@ input[type="text" i] {
   }
 }
 
-button{
-  padding: 5px;
-  width: 40px;
-  border-radius: 49%;
-  background-color: #1b1a1a;
-  color: white;
-}
-
 .card {
   padding: 2em;
 }
@@ -118,6 +110,9 @@ color: gray;
 }
 .parametros h2 span{
   font-size: 12px;
+}
+.parametros ul li{
+  list-style: none;
 }
 .sub{
     width: 80%;
