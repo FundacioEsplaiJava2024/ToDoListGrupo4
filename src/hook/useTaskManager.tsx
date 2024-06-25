@@ -1,10 +1,6 @@
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-
-interface Task {
-  id: string;
-  name: string;
-}
+import { Task } from '../domain/Task'
 
 interface Column {
   id: string;
@@ -49,7 +45,6 @@ export const useTaskManager = () => {
   const addColumn = (name: string) => {
     const newColumn = { id: uuidv4(), name, tasks: [] };
     setColumns([...columns, newColumn]);
-    console.log(newColumn)
   };
 
   const deleteColumn = (columnaId: string) => {
@@ -84,11 +79,6 @@ export const useTaskManager = () => {
         }));
       }
     }
-    console.log("target"+ targetColumn);
-    console.log("sourse id"+sourceColId);
-    console.log("target id"+targetColId);
-    console.log("sourse"+sourceColumn);
-    console.log(taskId)
   }
 
   return {
