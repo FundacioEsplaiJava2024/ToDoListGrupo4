@@ -63,7 +63,6 @@ const Columna: React.FC<ColumnaProps> = ({ count, tasks, name, columnId, addTask
     drop: (item: { id: string; sourceColId: string}) => {
       const targetColId = columnId; //stá mal
       moveTask(item.id, item.sourceColId, targetColId);
-      console.log("Itemid",item.id, "Item sourceCol id",item.sourceColId, "targedcol ID",targetColId);
     },
   });
   return (
