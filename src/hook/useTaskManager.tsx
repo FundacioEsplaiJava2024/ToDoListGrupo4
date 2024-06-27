@@ -21,14 +21,22 @@ export const useTaskManager = () => {
     const fetchTasks = async () => {
       try {
         const tasks = await api.getTasks({ projectId: assignedProject });
-        // Assuming tasks are initially assigned to the first column
-        setColumns(prevColumns =>
-          prevColumns.map((col, index) => 
-            index === 0
-              ? { ...col, tasks: tasks.map(task => ({ id: task.id, name: task.content })) }
-              : col
-          )
-        );
+        const tasksByTag: { [key: string]: Task[] } = {};
+
+        tasks.forEach(task => {
+          const tag = task.labels[0];
+          if (!tasksByTag[tag]) {
+            tasksByTag[tag] = [];
+          }
+          tasksByTag[tag].push({ id: task.id, name: task.content });
+        });
+
+        const newColumns = columns.map(col => ({
+          ...col,
+          tasks: tasksByTag[col.name] || [],
+        }));
+        
+        setColumns(newColumns);
       } catch (error) {
         console.error('Error fetching tasks:', error);
       }
@@ -39,14 +47,15 @@ export const useTaskManager = () => {
 
   const addTask = async (columnId: string, taskName: string) => {
     try {
-      const task = await api.addTask({ content: taskName, projectId: assignedProject });
-      setColumns(prevColumns =>
-        prevColumns.map(col =>
+      const column = columns.find(col => col.id === columnId);
+      if (column) {
+        const task = await api.addTask({ content: taskName, projectId: assignedProject, labels: [column.name] });
+        setColumns(columns.map(col =>
           col.id === columnId
             ? { ...col, tasks: [...col.tasks, { id: task.id, name: task.content }] }
             : col
-        )
-      );
+        ));
+      }
     } catch (error) {
       console.error('Error adding task:', error);
     }
@@ -55,13 +64,11 @@ export const useTaskManager = () => {
   const deleteTask = async (columnId: string, taskId: string) => {
     try {
       await api.deleteTask(taskId);
-      setColumns(prevColumns =>
-        prevColumns.map(col =>
-          col.id === columnId
-            ? { ...col, tasks: col.tasks.filter(task => task.id !== taskId) }
-            : col
-        )
-      );
+      setColumns(columns.map(col =>
+        col.id === columnId
+          ? { ...col, tasks: col.tasks.filter(task => task.id !== taskId) }
+          : col
+      ));
     } catch (error) {
       console.error('Error deleting task:', error);
     }
@@ -70,41 +77,65 @@ export const useTaskManager = () => {
   const editTask = async (columnId: string, taskId: string, newName: string) => {
     try {
       await api.updateTask(taskId, { content: newName });
-      setColumns(prevColumns =>
-        prevColumns.map(col =>
-          col.id === columnId
-            ? {
-              ...col,
-              tasks: col.tasks.map(task =>
-                task.id === taskId ? { ...task, name: newName } : task
-              )
-            }
-            : col
-        )
-      );
+      setColumns(columns.map(col =>
+        col.id === columnId
+          ? {
+            ...col,
+            tasks: col.tasks.map(task =>
+              task.id === taskId ? { ...task, name: newName } : task
+            )
+          }
+          : col
+      ));
     } catch (error) {
       console.error('Error editing task:', error);
     }
   };
 
-  const addColumn = (name: string) => {
+  const addColumn = async (name: string) => {
     const newColumn = { id: uuidv4(), name, tasks: [] };
-    setColumns(prevColumns => [...prevColumns, newColumn]);
+    setColumns([...columns, newColumn]);
   };
 
-  const deleteColumn = (columnId: string) => {
-    setColumns(prevColumns => prevColumns.filter(col => col.id !== columnId));
+  const deleteColumn = async (columnId: string) => {
+    const column = columns.find(col => col.id === columnId);
+    if (column) {
+      try {
+        const tasks = column.tasks;
+        for (const task of tasks) {
+          await api.deleteTask(task.id);
+        }
+        setColumns(columns.filter(col => col.id !== columnId));
+      } catch (error) {
+        console.error('Error deleting column:', error);
+      }
+    }
   };
 
   const editColumnName = (columnId: string, newName: string) => {
-    setColumns(prevColumns =>
-      prevColumns.map(col =>
+    const column = columns.find(col => col.id === columnId);
+    if (column) {
+      const oldName = column.name;
+      setColumns(columns.map(col =>
         col.id === columnId ? { ...col, name: newName } : col
-      )
-    );
+      ));
+
+      // Update tasks in the API with the new column name
+      const tasksToUpdate = columns.find(col => col.id === columnId)?.tasks || [];
+      tasksToUpdate.forEach(async (task) => {
+        try {
+          const apiTask = await api.getTask(task.id);
+          const newLabels = apiTask.labels.filter(label => label !== oldName);
+          newLabels.push(newName);
+          await api.updateTask(task.id, { labels: newLabels });
+        } catch (error) {
+          console.error(`Error updating task ${task.id} labels:`, error);
+        }
+      });
+    }
   };
 
-  const moveTask = (taskId: string, sourceColId: string, targetColId: string) => {
+  const moveTask = async (taskId: string, sourceColId: string, targetColId: string) => {
     if (sourceColId === targetColId) {
       return;
     }
@@ -115,8 +146,9 @@ export const useTaskManager = () => {
       const task = sourceColumn.tasks.find(task => task.id === taskId);
 
       if (task) {
-        setColumns(prevColumns =>
-          prevColumns.map(col => {
+        try {
+          await api.updateTask(taskId, { labels: [targetColumn.name] });
+          setColumns(columns.map(col => {
             if (col.id === sourceColId) {
               return { ...col, tasks: col.tasks.filter(task => task.id !== taskId) };
             }
@@ -124,8 +156,10 @@ export const useTaskManager = () => {
               return { ...col, tasks: [...col.tasks, task] };
             }
             return col;
-          })
-        );
+          }));
+        } catch (error) {
+          console.error('Error moving task:', error);
+        }
       }
     }
   };
