@@ -32,7 +32,7 @@ export const useTaskManager = () => {
     };
 
     fetchTasks();
-  }, [columns]);
+  }, []);
 
   const addTask = async (columnId: string, taskName: string) => {
     try {
