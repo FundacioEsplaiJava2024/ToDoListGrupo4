@@ -13,9 +13,10 @@ interface Column {
 }
 
 export const useTaskManager = () => {
-  const [columns, setColumns] = useState<Column[]>([
-    { id: uuidv4(), name: 'Columna 1', tasks: [] },
-  ]);
+  const [columns, setColumns] = useState<Column[]>(() => {
+    const savedColumns = localStorage.getItem('columns');
+    return savedColumns ? JSON.parse(savedColumns) : [{ id: uuidv4(), name: 'Columna 1', tasks: [] }];
+  });
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -44,6 +45,10 @@ export const useTaskManager = () => {
 
     fetchTasks();
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('columns', JSON.stringify(columns));
+  }, [columns]);
 
   const addTask = async (columnId: string, taskName: string) => {
     try {
