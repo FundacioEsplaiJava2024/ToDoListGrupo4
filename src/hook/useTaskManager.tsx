@@ -3,8 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { Task } from '../domain/Task';
 import { TodoistApi } from '@doist/todoist-api-typescript';
 
-const api = new TodoistApi('119851f333e3b56540f44a073814b5b44fe00f25');
-const assignedProject = '2335344690';
+const api = new TodoistApi('119fcc545482c6691694cfbee148660b8df319f7');
+const assignedProject = '2335344757';
 
 interface Column {
   id: string;
