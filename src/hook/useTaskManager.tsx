@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Task } from '../domain/Task'
 import { TodoistApi } from '@doist/todoist-api-typescript';
 const api = new TodoistApi("119851f333e3b56540f44a073814b5b44fe00f25");
+const asignedProyect = "2335337565";
 
 interface Column {
   id: string;
@@ -19,9 +20,8 @@ export const useTaskManager = () => {
   useEffect(() => {
     const createProject = async () => {
       try {
-        const project = await api.addProject({ name: 'Nuevo Proyecto' });
-        setProjectId(project.id);
-        setColumns([{ id: project.id, name: project.name, tasks: [] }]);
+        const project = await api.getProjects();
+        console.log(project)
       } catch (error) {
         console.error('Error creando el proyecto:', error);
       }
@@ -36,6 +36,7 @@ export const useTaskManager = () => {
         ? { ...col, tasks: [...col.tasks, { id: uuidv4(), name: taskName }] }
         : col
     ));
+    api.addTask({content:taskName ,projectId:asignedProyect});
   };
 
   const deleteTask = (columnaId: string, taskId: string) => {
