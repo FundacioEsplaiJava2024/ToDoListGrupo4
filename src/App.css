@@ -97,14 +97,14 @@ color: gray;
   width: 70%;
   border: solid 1px grey;
   padding: 30px;
-  height: 80vh;
+  min-height: 80vh;
   box-shadow: 14px 15px 38px -11px rgba(105,96,105,1);
 }
 .parametros{
   border: 1px solid grey;
   width: 30%;
   border-radius: 10px;
-  height: 75vh;
+  min-height: 75vh;
   margin-bottom: 15px;
   margin-right: 32px;
 }

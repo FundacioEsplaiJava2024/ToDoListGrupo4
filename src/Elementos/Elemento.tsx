@@ -4,6 +4,7 @@ import { EditarIcono, BorrarIcono, GuardarIcono, CancelarIcono } from './iconos'
 import { useDrag } from 'react-dnd';
 import { ItemTypes } from './ItemTypes';
 
+
 export interface ElementoProps {
   id: string;
   title: string;
