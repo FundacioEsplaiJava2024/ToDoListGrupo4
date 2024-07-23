@@ -180,6 +180,7 @@ export const useTaskManager = () => {
   };
   return {
     currentProject,
+    currentProjectId,
     projects,
     createProject,
     loadProject,

@@ -8,6 +8,7 @@ import Header from './header';
 const Tablero: React.FC = () => {
   const {
     currentProject,
+    currentProjectId,
     projects,
     createProject,
     loadProject,
@@ -45,7 +46,8 @@ const Tablero: React.FC = () => {
           projects={projects}
           onCreateProject={handleCreateProject}
           onLoadProject={loadProject}
-          onDeleteProject={handleDeleteProject} // Añadido
+          onDeleteProject={handleDeleteProject}
+          currentProjectId={currentProjectId}
         />
         <div className='tablero'>
           <h2 className='plus'>
@@ -71,6 +73,7 @@ const Tablero: React.FC = () => {
               eliminarColumna={() => deleteColumn(columna.id)}
               editarNombreColumna={(nuevoNombre) => editColumnName(columna.id, nuevoNombre)}
               moveTask={moveTask}
+              
             />
           ))}
         </div>
