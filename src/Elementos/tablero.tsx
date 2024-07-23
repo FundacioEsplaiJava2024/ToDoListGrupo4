@@ -27,6 +27,13 @@ const Tablero: React.FC = () => {
     }
   };
 
+  const handleAddColumn = () => {
+    const name = prompt('Ingrese el nombre de la nueva columna:');
+    if (name && name.trim() !== '') {
+      addColumn(name.trim());
+    }
+  };
+
   return (
     <>
       <Header projectName={currentProject.name} onProjectNameChange={updateProjectName} />
@@ -34,7 +41,7 @@ const Tablero: React.FC = () => {
         <Aside projects={projects} onCreateProject={handleCreateProject} onLoadProject={loadProject} />
         <div className='tablero'>
           <h2 className='plus'>
-            <button onClick={() => addColumn(`Columna ${currentProject.columns.length + 1}`)} className="add-column-btn">
+            <button onClick={handleAddColumn} className="add-column-btn">
               +
             </button>
           </h2>

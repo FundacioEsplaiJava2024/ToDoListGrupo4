@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Task } from '../domain/Task';
-import { TodoistApi } from '@doist/todoist-api-typescript';
-
-const api = new TodoistApi('YOUR_API_KEY'); // Reemplaza con tu clave API
 
 interface Column {
   id: string;
@@ -43,71 +40,57 @@ export const useTaskManager = () => {
     ));
   };
 
-  const addTask = async (columnId: string, taskName: string) => {
-    try {
-      const task = await api.addTask({ content: taskName, projectId: assignedProject, labels: [columnId] });
-      setProjects(projects.map(project => {
-        if (project.id === currentProjectId) {
-          return {
-            ...project,
-            columns: project.columns.map(col =>
-              col.id === columnId ? { ...col, tasks: [...col.tasks, { id: task.id, name: task.content }] } : col
-            ),
-          };
-        }
-        return project;
-      }));
-    } catch (error) {
-      console.error('Error adding task:', error);
-    }
+  const addTask = (columnId: string, taskName: string) => {
+    const task = { id: uuidv4(), name: taskName };
+    setProjects(projects.map(project => {
+      if (project.id === currentProjectId) {
+        return {
+          ...project,
+          columns: project.columns.map(col =>
+            col.id === columnId ? { ...col, tasks: [...col.tasks, task] } : col
+          ),
+        };
+      }
+      return project;
+    }));
   };
 
-  const deleteTask = async (columnId: string, taskId: string) => {
-    try {
-      await api.deleteTask(taskId);
-      setProjects(projects.map(project => {
-        if (project.id === currentProjectId) {
-          return {
-            ...project,
-            columns: project.columns.map(col =>
-              col.id === columnId ? { ...col, tasks: col.tasks.filter(task => task.id !== taskId) } : col
-            ),
-          };
-        }
-        return project;
-      }));
-    } catch (error) {
-      console.error('Error deleting task:', error);
-    }
+  const deleteTask = (columnId: string, taskId: string) => {
+    setProjects(projects.map(project => {
+      if (project.id === currentProjectId) {
+        return {
+          ...project,
+          columns: project.columns.map(col =>
+            col.id === columnId ? { ...col, tasks: col.tasks.filter(task => task.id !== taskId) } : col
+          ),
+        };
+      }
+      return project;
+    }));
   };
 
-  const editTask = async (columnId: string, taskId: string, newName: string) => {
-    try {
-      await api.updateTask(taskId, { content: newName });
-      setProjects(projects.map(project => {
-        if (project.id === currentProjectId) {
-          return {
-            ...project,
-            columns: project.columns.map(col =>
-              col.id === columnId
-                ? {
-                  ...col,
-                  tasks: col.tasks.map(task =>
-                    task.id === taskId ? { ...task, name: newName } : task
-                  ),
-                }
-                : col
-            ),
-          };
-        }
-        return project;
-      }));
-    } catch (error) {
-      console.error('Error editing task:', error);
-    }
+  const editTask = (columnId: string, taskId: string, newName: string) => {
+    setProjects(projects.map(project => {
+      if (project.id === currentProjectId) {
+        return {
+          ...project,
+          columns: project.columns.map(col =>
+            col.id === columnId
+              ? {
+                ...col,
+                tasks: col.tasks.map(task =>
+                  task.id === taskId ? { ...task, name: newName } : task
+                ),
+              }
+              : col
+          ),
+        };
+      }
+      return project;
+    }));
   };
 
-  const addColumn = async (name: string) => {
+  const addColumn = (name: string) => {
     const newColumn = { id: uuidv4(), name, tasks: [] };
     setProjects(projects.map(project =>
       project.id === currentProjectId
@@ -116,23 +99,16 @@ export const useTaskManager = () => {
     ));
   };
 
-  const deleteColumn = async (columnId: string) => {
-    try {
-      const column = currentProject.columns.find(col => col.id === columnId);
-      if (column) {
-        const tasks = column.tasks;
-        for (const task of tasks) {
-          await api.deleteTask(task.id);
-        }
-        setProjects(projects.map(project =>
-          project.id === currentProjectId
-            ? { ...project, columns: project.columns.filter(col => col.id !== columnId) }
-            : project
-        ));
+  const deleteColumn = (columnId: string) => {
+    setProjects(projects.map(project => {
+      if (project.id === currentProjectId) {
+        return {
+          ...project,
+          columns: project.columns.filter(col => col.id !== columnId)
+        };
       }
-    } catch (error) {
-      console.error('Error deleting column:', error);
-    }
+      return project;
+    }));
   };
 
   const editColumnName = (columnId: string, newName: string) => {
@@ -148,7 +124,7 @@ export const useTaskManager = () => {
     ));
   };
 
-  const moveTask = async (taskId: string, sourceColId: string, targetColId: string) => {
+  const moveTask = (taskId: string, sourceColId: string, targetColId: string) => {
     if (sourceColId === targetColId) return;
 
     const sourceColumn = currentProject.columns.find(col => col.id === sourceColId);
@@ -158,28 +134,23 @@ export const useTaskManager = () => {
       const task = sourceColumn.tasks.find(task => task.id === taskId);
 
       if (task) {
-        try {
-          await api.updateTask(taskId, { labels: [targetColumn.name] });
-          setProjects(projects.map(project => {
-            if (project.id === currentProjectId) {
-              return {
-                ...project,
-                columns: project.columns.map(col => {
-                  if (col.id === sourceColId) {
-                    return { ...col, tasks: col.tasks.filter(task => task.id !== taskId) };
-                  }
-                  if (col.id === targetColId) {
-                    return { ...col, tasks: [...col.tasks, task] };
-                  }
-                  return col;
-                }),
-              };
-            }
-            return project;
-          }));
-        } catch (error) {
-          console.error('Error moving task:', error);
-        }
+        setProjects(projects.map(project => {
+          if (project.id === currentProjectId) {
+            return {
+              ...project,
+              columns: project.columns.map(col => {
+                if (col.id === sourceColId) {
+                  return { ...col, tasks: col.tasks.filter(task => task.id !== taskId) };
+                }
+                if (col.id === targetColId) {
+                  return { ...col, tasks: [...col.tasks, task] };
+                }
+                return col;
+              }),
+            };
+          }
+          return project;
+        }));
       }
     }
   };
@@ -209,4 +180,3 @@ export const useTaskManager = () => {
     moveTask,
   };
 };
-  
