@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTaskManager } from '../hook/useTaskManager';
 import Aside from './aside';
 import Columna from './Columna';
+
 
 const Tablero: React.FC = () => {
   const {
@@ -13,12 +14,12 @@ const Tablero: React.FC = () => {
     deleteColumn,
     editColumnName,
     moveTask,
+    createProject,
   } = useTaskManager();
-
   return (
     <>
       <main>
-        <Aside />
+        <Aside createProject={createProject}/>
         <div className='tablero'>
           <h2 className='plus'><button onClick={() => addColumn(`Columna ${columns.length + 1}`)} className="add-column-btn">
             +
@@ -38,6 +39,7 @@ const Tablero: React.FC = () => {
               moveTask={moveTask}
             />
           ))}
+
         </div>
       </main>
     </>
