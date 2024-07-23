@@ -166,10 +166,17 @@ export const useTaskManager = () => {
   };
 
   const deleteProject = (projectId: string) => {
-    if (projectId === currentProjectId) {
+    // Eliminar el proyecto actual y seleccionar el siguiente disponible
+    const filteredProjects = projects.filter(project => project.id !== projectId);
+    setProjects(filteredProjects);
+    
+    if (filteredProjects.length > 0) {
+      // Si hay proyectos restantes, seleccionar el primero
+      setCurrentProjectId(filteredProjects[0].id);
+    } else {
+      // Si no quedan proyectos, deseleccionar el proyecto
       setCurrentProjectId('');
     }
-    setProjects(projects.filter(project => project.id !== projectId));
   };
   return {
     currentProject,
