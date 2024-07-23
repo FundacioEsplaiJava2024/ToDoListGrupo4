@@ -2,10 +2,13 @@ import React from 'react';
 import { useTaskManager } from '../hook/useTaskManager';
 import Aside from './aside';
 import Columna from './Columna';
+import Header from './header';
 
 const Tablero: React.FC = () => {
   const {
     columns,
+    projectName,
+    updateProjectName,
     addTask,
     deleteTask,
     editTask,
@@ -17,12 +20,15 @@ const Tablero: React.FC = () => {
 
   return (
     <>
+      <Header projectName={projectName} onProjectNameChange={updateProjectName} />
       <main>
         <Aside />
         <div className='tablero'>
-          <h2 className='plus'><button onClick={() => addColumn(`Columna ${columns.length + 1}`)} className="add-column-btn">
-            +
-          </button></h2>
+          <h2 className='plus'>
+            <button onClick={() => addColumn(`Columna ${columns.length + 1}`)} className="add-column-btn">
+              +
+            </button>
+          </h2>
           {columns.map((columna) => (
             <Columna
               key={columna.id}

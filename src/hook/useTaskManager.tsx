@@ -17,7 +17,21 @@ export const useTaskManager = () => {
     const savedColumns = localStorage.getItem('columns');
     return savedColumns ? JSON.parse(savedColumns) : [{ id: uuidv4(), name: 'Columna 1', tasks: [] }];
   });
+  const [projectName, setProjectName] = useState<string>(() => {
+    const savedProjectName = localStorage.getItem('projectName');
+    return savedProjectName ? savedProjectName : 'Mi Proyecto';
+  });
+  useEffect(() => {
+    localStorage.setItem('columns', JSON.stringify(columns));
+  }, [columns]);
 
+  useEffect(() => {
+    localStorage.setItem('projectName', projectName);
+  }, [projectName]);
+
+  const updateProjectName = (newName: string) => {
+    setProjectName(newName);
+  };
   useEffect(() => {
     const fetchTasks = async () => {
       try {
@@ -171,6 +185,8 @@ export const useTaskManager = () => {
 
   return {
     columns,
+    projectName,
+    updateProjectName,
     addTask,
     deleteTask,
     editTask,
