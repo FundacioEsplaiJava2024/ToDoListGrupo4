@@ -1,12 +1,14 @@
+// src/components/Aside.tsx
 import React from 'react';
 
 interface AsideProps {
   projects: { id: string; name: string }[];
   onCreateProject: () => void;
   onLoadProject: (projectId: string) => void;
+  onDeleteProject: (projectId: string) => void; // Añadido
 }
 
-const Aside: React.FC<AsideProps> = ({ projects, onCreateProject, onLoadProject }) => {
+const Aside: React.FC<AsideProps> = ({ projects, onCreateProject, onLoadProject, onDeleteProject }) => {
   return (
     <aside>
       <div className='container'>
@@ -22,6 +24,11 @@ const Aside: React.FC<AsideProps> = ({ projects, onCreateProject, onLoadProject 
                 ))}
               </select>
             </li>
+            {projects.length > 0 && (
+              <li>
+                <button onClick={() => onDeleteProject(projects[0].id)}>Eliminar Proyecto Actual</button>
+              </li>
+            )}
             <li><a href='#'>Quienes somos</a></li>
             <li><a href='#'>Utilidad de la app</a></li>
             <li><a href='#'>Proyectos</a></li>

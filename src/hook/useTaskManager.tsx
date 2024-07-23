@@ -165,11 +165,18 @@ export const useTaskManager = () => {
     setCurrentProjectId(projectId);
   };
 
+  const deleteProject = (projectId: string) => {
+    if (projectId === currentProjectId) {
+      setCurrentProjectId('');
+    }
+    setProjects(projects.filter(project => project.id !== projectId));
+  };
   return {
     currentProject,
     projects,
     createProject,
     loadProject,
+    deleteProject,
     updateProjectName,
     addTask,
     deleteTask,

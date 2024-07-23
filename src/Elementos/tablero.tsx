@@ -1,3 +1,4 @@
+// src/components/Tablero.tsx
 import React from 'react';
 import { useTaskManager } from '../hook/useTaskManager';
 import Aside from './aside';
@@ -10,6 +11,7 @@ const Tablero: React.FC = () => {
     projects,
     createProject,
     loadProject,
+    deleteProject,
     updateProjectName,
     addTask,
     deleteTask,
@@ -27,10 +29,11 @@ const Tablero: React.FC = () => {
     }
   };
 
-  const handleAddColumn = () => {
-    const name = prompt('Ingrese el nombre de la nueva columna:');
-    if (name && name.trim() !== '') {
-      addColumn(name.trim());
+  const handleDeleteProject = () => {
+    if (currentProject.id) {
+      if (window.confirm('¿Estás seguro de que deseas eliminar este proyecto?')) {
+        deleteProject(currentProject.id);
+      }
     }
   };
 
@@ -38,10 +41,20 @@ const Tablero: React.FC = () => {
     <>
       <Header projectName={currentProject.name} onProjectNameChange={updateProjectName} />
       <main>
-        <Aside projects={projects} onCreateProject={handleCreateProject} onLoadProject={loadProject} />
+        <Aside
+          projects={projects}
+          onCreateProject={handleCreateProject}
+          onLoadProject={loadProject}
+          onDeleteProject={handleDeleteProject} // Añadido
+        />
         <div className='tablero'>
           <h2 className='plus'>
-            <button onClick={handleAddColumn} className="add-column-btn">
+            <button onClick={() => {
+              const name = prompt('Ingrese el nombre de la nueva columna:');
+              if (name && name.trim() !== '') {
+                addColumn(name.trim());
+              }
+            }} className="add-column-btn">
               +
             </button>
           </h2>
