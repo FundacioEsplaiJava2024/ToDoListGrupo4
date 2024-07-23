@@ -6,8 +6,10 @@ import Header from './header';
 
 const Tablero: React.FC = () => {
   const {
-    columns,
-    projectName,
+    currentProject,
+    projects,
+    createProject,
+    loadProject,
     updateProjectName,
     addTask,
     deleteTask,
@@ -18,18 +20,25 @@ const Tablero: React.FC = () => {
     moveTask,
   } = useTaskManager();
 
+  const handleCreateProject = () => {
+    const name = prompt('Ingrese el nombre del nuevo proyecto:');
+    if (name && name.trim() !== '') {
+      createProject(name.trim());
+    }
+  };
+
   return (
     <>
-      <Header projectName={projectName} onProjectNameChange={updateProjectName} />
+      <Header projectName={currentProject.name} onProjectNameChange={updateProjectName} />
       <main>
-        <Aside />
+        <Aside projects={projects} onCreateProject={handleCreateProject} onLoadProject={loadProject} />
         <div className='tablero'>
           <h2 className='plus'>
-            <button onClick={() => addColumn(`Columna ${columns.length + 1}`)} className="add-column-btn">
+            <button onClick={() => addColumn(`Columna ${currentProject.columns.length + 1}`)} className="add-column-btn">
               +
             </button>
           </h2>
-          {columns.map((columna) => (
+          {currentProject.columns.map((columna) => (
             <Columna
               key={columna.id}
               count={columna.tasks.length}
