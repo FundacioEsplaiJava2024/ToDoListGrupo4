@@ -183,5 +183,6 @@ export const useTaskManager = () => {
     deleteColumn,
     editColumnName,
     moveTask,
+    createProject,
   };
 };
