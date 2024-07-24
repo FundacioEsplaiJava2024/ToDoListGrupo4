@@ -1,21 +1,21 @@
-// src/components/Header.tsx
 import React, { useState } from 'react';
 import SignUp from './Signup';
 import SignIn from './SignIn';
+import { useTaskManager } from '../hook/useTaskManager';
 
-interface HeaderProps {
-  projectName: string;
-  onProjectNameChange: (newName: string) => void;
-}
+const Header: React.FC = () => {
+  const {
+    currentProject,
+    updateProjectName,
+  } = useTaskManager();
 
-const Header: React.FC<HeaderProps> = ({ projectName, onProjectNameChange }) => {
   const [showSignUp, setShowSignUp] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
 
   const handleProjectNameClick = () => {
-    const newName = prompt('Ingrese el nuevo nombre del proyecto:', projectName);
+    const newName = prompt('Ingrese el nuevo nombre del proyecto:', currentProject.name);
     if (newName && newName.trim() !== '') {
-      onProjectNameChange(newName.trim());
+      updateProjectName(newName.trim());
     }
   };
 
@@ -31,13 +31,12 @@ const Header: React.FC<HeaderProps> = ({ projectName, onProjectNameChange }) => 
         <button onClick={() => { setShowSignIn(true); setShowSignUp(false); }}>Sign In</button>
       </div>
       <h1 className='titulo1' onClick={handleProjectNameClick}>
-        {projectName}
+        {currentProject.name}
       </h1>
       {showSignUp && <SignUp onClose={closeForms} />}
       {showSignIn && <SignIn onClose={closeForms} />}
     </header>
   );
 };
-//hola
 
 export default Header;
