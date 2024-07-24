@@ -25,8 +25,8 @@ const Header: React.FC = () => {
   return (
     <header>
       <div className="auth-buttons">
-        <button onClick={() => openDialog('signUp')}>Sign Up</button>
-        <button onClick={() => openDialog('signIn')}>Sign In</button>
+        <button onClick={() => openDialog('signUp')}>Crear Cuenta</button>
+        <button onClick={() => openDialog('signIn')}>Log In</button>
       </div>
       <h1 className='titulo1' onClick={handleProjectNameClick}>
         {currentProject.name}

@@ -14,11 +14,11 @@ const SignUp: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     if (event.key === 'Enter') {
       handleSignUp();
     }
-  };
+  }; 
 
   return (
     <div>
-      <h2>Sign Up</h2>
+      <h2>Crear cuenta </h2>
       <input
         type="text"
         value={username}
@@ -33,7 +33,7 @@ const SignUp: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         onKeyPress={handleKeyPress}
         placeholder="Password"
       />
-      <button onClick={handleSignUp}>Sign Up</button>
+      <button onClick={handleSignUp}>Crear cuenta</button>
     </div>
   );
 };

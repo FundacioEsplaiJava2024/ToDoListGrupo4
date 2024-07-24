@@ -16,21 +16,21 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ type, onClose }) => {
 
   return (
     <div className="auth-dialog">
-      <h2>{type === 'signUp' ? 'Sign Up' : 'Sign In'}</h2>
+      <h2>{type === 'signUp' ? 'Crear cuenta' : 'Log in'}</h2>
       <input
         type="text"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-        placeholder="Username"
+        placeholder="Usuario"
       />
       <input
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
+        placeholder="Contraseña"
       />
-      <button onClick={handleSubmit}>{type === 'signUp' ? 'Sign Up' : 'Sign In'}</button>
-      <button onClick={onClose}>Cancel</button>
+      <button onClick={handleSubmit}>{type === 'signUp' ? 'Aceptar' : 'Aceptar'}</button>
+      <button onClick={onClose}>Cancelar</button>
     </div>
   );
 };
