@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Task } from '../domain/Task';
+import { getElements, getProjects } from './Service';
 
 interface Column {
   id: string;
@@ -32,6 +33,39 @@ export const useTaskManager = () => {
     localStorage.setItem('currentProjectId', currentProjectId);
   }, [currentProjectId]);
 
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        const projectsData = await getProjects();
+        const tasksData = await getElements();
+        
+        // Agrupar tareas por columna
+        const tasksByColumnId: { [key: string]: Task[] } = {};
+        tasksData.forEach((task: Task) => {
+          if (!tasksByColumnId[task.columnId]) {
+            tasksByColumnId[task.columnId] = [];
+          }
+          tasksByColumnId[task.columnId].push(task);
+        });
+
+        // Actualizar proyectos con tareas en sus columnas
+        const projectsWithTasks = projectsData.map((project: Project) => ({
+          ...project,
+          columns: project.columns.map((column: Column) => ({
+            ...column,
+            tasks: tasksByColumnId[column.id] || [],
+          })),
+        }));
+
+        setProjects(projectsWithTasks);
+      } catch (error) {
+        console.error('Error fetching initial data:', error);
+      }
+    };
+
+    fetchInitialData();
+  }, []);
+
   const currentProject = projects.find(project => project.id === currentProjectId) || { id: '', name: '', columns: [] };
 
   const updateProjectName = (newName: string) => {
@@ -41,7 +75,7 @@ export const useTaskManager = () => {
   };
 
   const addTask = (columnId: string, taskName: string) => {
-    const task = { id: uuidv4(), name: taskName };
+    const task = { id: uuidv4(), name: taskName, columnId };
     setProjects(projects.map(project => {
       if (project.id === currentProjectId) {
         return {
@@ -178,6 +212,7 @@ export const useTaskManager = () => {
       setCurrentProjectId('');
     }
   };
+
   return {
     currentProject,
     currentProjectId,
