@@ -22,3 +22,33 @@ export async function getProjects(){
       throw error;
     }
   };
+  export async function getUserProjects(userId: string){
+    try {
+      const response = await axios.get(`${API_BASE_URL}/projects/`+userId);
+      console.log('projects',response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching elementos:', error);
+      throw error;
+    }
+  };
+  export async function getColumnsByProjectId(projectId: string){
+    try {
+      const response = await axios.get(`${API_BASE_URL}/columns/project/`+projectId);
+      console.log('columns',response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching elementos:', error);
+      throw error;
+    }
+  };
+  export async function getTasksByColumnId(columnId: string){
+    try {
+      const response = await axios.get(`${API_BASE_URL}/tasks/`+columnId);
+      console.log('columns',response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching elementos:', error);
+      throw error;
+    }
+  };
