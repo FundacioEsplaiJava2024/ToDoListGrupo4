@@ -38,6 +38,10 @@ export const useTaskManager = () => {
       try {
         const projectsData = await getProjects();
         const tasksData = await getElements();
+
+        if (!projectsData || !tasksData) {
+          throw new Error("Datos no cargados correctamente");
+        }
         
         // Agrupar tareas por columna
         const tasksByColumnId: { [key: string]: Task[] } = {};
