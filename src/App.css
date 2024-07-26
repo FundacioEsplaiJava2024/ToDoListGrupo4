@@ -54,12 +54,15 @@ input[type="text" i] {
 .read-the-docs {
   color: #888;
 }
-
+header{
+  margin-bottom: 2rem;
+}
 main{
   width: 100%;
   display: flex;
   justify-content: space-around;
   box-shadow: 0px 7px 5px -1px rgba(105,96,105,1);
+  padding-bottom: 1rem;
 }
 .tablero{
   width: 70%;
@@ -91,7 +94,10 @@ margin-bottom: 15px;
 color: gray;
 }
 
-
+.auth-buttons{
+  display: flex;
+  justify-content: end;
+}
 
 .apartados{
   width: 70%;
@@ -188,9 +194,35 @@ aside{
 footer{
   margin: 5rem 0 2rem 0;
 }
+footer h3{
+  padding: 1rem 0;
+}
 footer .Integrantes{
 
   display:flex;
   justify-content: space-around;
   box-shadow: 2px -6px 7px -1px rgba(105,96,105,1);
+}
+.auth-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.auth-dialog input {
+  display: block;
+  margin-bottom: 10px;
+  padding: 8px;
+  width: 100%;
+}
+
+.auth-dialog button {
+  margin-right: 10px;
+  padding: 8px 16px;
 }
