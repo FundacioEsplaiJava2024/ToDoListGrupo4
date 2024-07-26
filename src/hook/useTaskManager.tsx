@@ -16,29 +16,27 @@ interface Project {
 }
 
 export const useTaskManager = () => {
-  const [projects, setProjects] = useState<Project[]>(() => {
-    const savedProjects = localStorage.getItem('projects');
-    return savedProjects ? JSON.parse(savedProjects) : [];
-  });
-  const [currentProjectId, setCurrentProjectId] = useState<string>(() => {
-    const savedCurrentProjectId = localStorage.getItem('currentProjectId');
-    return savedCurrentProjectId ? savedCurrentProjectId : '';
-  });
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [currentProjectId, setCurrentProjectId] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    localStorage.setItem('projects', JSON.stringify(projects));
-  }, [projects]);
-
-  useEffect(() => {
-    localStorage.setItem('currentProjectId', currentProjectId);
-  }, [currentProjectId]);
-
+  // Fetch projects and tasks from the API when the component mounts
   useEffect(() => {
     const fetchInitialData = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const projectsData = await getProjects();
         const tasksData = await getElements();
-        
+
+        // Transform the data to match the expected format
+        const transformedProjects = projectsData.map((proj: any) => ({
+          id: proj.idproject.toString(),
+          name: proj.name,
+          columns: [], // Initialize with empty columns; adjust if needed
+        }));
+
         // Agrupar tareas por columna
         const tasksByColumnId: { [key: string]: Task[] } = {};
         tasksData.forEach((task: Task) => {
@@ -49,7 +47,7 @@ export const useTaskManager = () => {
         });
 
         // Actualizar proyectos con tareas en sus columnas
-        const projectsWithTasks = projectsData.map((project: Project) => ({
+        const projectsWithTasks = transformedProjects.map((project: Project) => ({
           ...project,
           columns: project.columns.map((column: Column) => ({
             ...column,
@@ -58,13 +56,29 @@ export const useTaskManager = () => {
         }));
 
         setProjects(projectsWithTasks);
+        if (projectsWithTasks.length > 0) {
+          setCurrentProjectId(projectsWithTasks[0].id);
+        }
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching initial data:', error);
+        setError('Failed to fetch data');
+        setLoading(false);
       }
     };
 
     fetchInitialData();
   }, []);
+
+  // Save projects to localStorage when they change
+  useEffect(() => {
+    localStorage.setItem('projects', JSON.stringify(projects));
+  }, [projects]);
+
+  // Save currentProjectId to localStorage when it changes
+  useEffect(() => {
+    localStorage.setItem('currentProjectId', currentProjectId);
+  }, [currentProjectId]);
 
   const currentProject = projects.find(project => project.id === currentProjectId) || { id: '', name: '', columns: [] };
 
@@ -200,15 +214,12 @@ export const useTaskManager = () => {
   };
 
   const deleteProject = (projectId: string) => {
-    // Eliminar el proyecto actual y seleccionar el siguiente disponible
     const filteredProjects = projects.filter(project => project.id !== projectId);
     setProjects(filteredProjects);
     
     if (filteredProjects.length > 0) {
-      // Si hay proyectos restantes, seleccionar el primero
       setCurrentProjectId(filteredProjects[0].id);
     } else {
-      // Si no quedan proyectos, deseleccionar el proyecto
       setCurrentProjectId('');
     }
   };
@@ -217,6 +228,8 @@ export const useTaskManager = () => {
     currentProject,
     currentProjectId,
     projects,
+    loading,
+    error,
     createProject,
     loadProject,
     deleteProject,
