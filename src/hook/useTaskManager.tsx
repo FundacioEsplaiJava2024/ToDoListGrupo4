@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 import { Task } from '../domain/Task';
+import { getProjects } from './Service';
 
 const API_BASE_URL = 'http://localhost:8080/TodolistG4'; // Asegúrate de que esta URL sea correcta
 
@@ -242,6 +243,5 @@ export const useTaskManager = () => {
     deleteColumn,
     editColumnName,
     moveTask,
-    createProject,
   };
 };
