@@ -1,23 +1,21 @@
 import React from 'react';
 
 interface AsideProps {
-  createProject: (projectName: string) => void;
+  projects: { id: string; name: string }[];
+  onCreateProject: () => void;
+  currentProjectId: string;
+  onLoadProject: (projectId: string) => void;
+  onDeleteProject: (projectId: string) => void;
 }
 
-const Aside: React.FC<AsideProps> = ({ createProject }) => {
-  const handleNewProject = () => {
-    const projectName = prompt('Ingrese el nombre del nuevo proyecto:');
-    if (projectName) {
-      createProject(projectName);
-    }
-  };
-
+const Aside: React.FC<AsideProps> = ({ projects, onCreateProject, onLoadProject, onDeleteProject, currentProjectId }) => {
   return (
     <aside>
       <div className='container'>
         <h3>Utilidades</h3>
         <nav>
           <ul>
+            <li><a href='#' onClick={onCreateProject}>Crear Proyecto</a></li>
             <li>
               <select value={currentProjectId} onChange={(e) => onLoadProject(e.target.value)} defaultValue="">
                 <option value="" disabled>Seleccionar Proyecto</option>
@@ -26,6 +24,14 @@ const Aside: React.FC<AsideProps> = ({ createProject }) => {
                 ))}
               </select>
             </li>
+            {projects.length > 0 && (
+              <li>
+                <button onClick={() => onDeleteProject(currentProjectId)}>Eliminar Proyecto Actual</button>
+              </li>
+            )}
+            <li><a href='#'>Quienes somos</a></li>
+            <li><a href='#'>Utilidad de la app</a></li>
+            <li><a href='#'>Proyectos</a></li>
           </ul>
         </nav>
       </div>

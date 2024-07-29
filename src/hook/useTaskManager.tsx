@@ -1,20 +1,12 @@
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import axios from 'axios';
 import { Task } from '../domain/Task';
-import { getProjects } from './Service';
-
-const API_BASE_URL = 'http://localhost:8080/TodolistG4'; // Asegúrate de que esta URL sea correcta
+import { getProjects, getColumnsByProjectId, getTasksByColumnId } from './Service';
 
 interface Column {
   id: string;
   name: string;
   tasks: Task[];
-}
-interface Project {
-  projectId: string;
-  projectName: string;
-  columns: Column[];
 }
 
 interface Project {
@@ -29,43 +21,24 @@ export const useTaskManager = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch projects and tasks from the API when the component mounts
+  // Fetch projects from the API when the component mounts
   useEffect(() => {
     const fetchInitialData = async () => {
       setLoading(true);
       setError(null);
       try {
         const projectsData = await getProjects();
-        const tasksData = await getElements();
 
         // Transform the data to match the expected format
         const transformedProjects = projectsData.map((proj: any) => ({
-          id: proj.idproject.toString(),
-          name: proj.name,
+          id: proj.project_id.toString(),
+          name: proj.project_name,
           columns: [], // Initialize with empty columns; adjust if needed
         }));
 
-        // Agrupar tareas por columna
-        const tasksByColumnId: { [key: string]: Task[] } = {};
-        tasks.forEach((task) => {
-          if (!tasksByColumnId[task.columnId]) {
-            tasksByColumnId[task.columnId] = [];
-          }
-          tasksByColumnId[task.columnId].push(task);
-        });
-
-        // Actualizar proyectos con tareas en sus columnas
-        const projectsWithTasks = transformedProjects.map((project: Project) => ({
-          ...project,
-          columns: project.columns.map((column: Column) => ({
-            ...column,
-            tasks: tasksByColumnId[column.id] || [],
-          })),
-        }));
-
-        setProjects(projectsWithTasks);
-        if (projectsWithTasks.length > 0) {
-          setCurrentProjectId(projectsWithTasks[0].id);
+        setProjects(transformedProjects);
+        if (transformedProjects.length > 0) {
+          setCurrentProjectId(transformedProjects[0].id);
         }
         setLoading(false);
       } catch (error) {
@@ -77,6 +50,50 @@ export const useTaskManager = () => {
 
     fetchInitialData();
   }, []);
+
+  // Fetch columns and tasks when the current project changes
+  useEffect(() => {
+    if (currentProjectId) {
+      const fetchProjectData = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+          const columnsData = await getColumnsByProjectId(currentProjectId);
+
+          const columnsWithTasks = await Promise.all(
+            columnsData.map(async (col: any) => {
+              const tasks = await getTasksByColumnId(col.column_id);
+              return {
+                id: col.column_id,
+                name: col.column_name,
+                tasks: tasks.map((task: any) => ({
+                  id: task.task_id,
+                  name: task.task_name,
+                  columnId: task.column_id,
+                })),
+              };
+            })
+          );
+
+          setProjects((prevProjects) =>
+            prevProjects.map((project) =>
+              project.id === currentProjectId
+                ? { ...project, columns: columnsWithTasks }
+                : project
+            )
+          );
+
+          setLoading(false);
+        } catch (error) {
+          console.error('Error fetching project data:', error);
+          setError('Failed to fetch project data');
+          setLoading(false);
+        }
+      };
+
+      fetchProjectData();
+    }
+  }, [currentProjectId]);
 
   // Save projects to localStorage when they change
   useEffect(() => {
@@ -168,13 +185,16 @@ export const useTaskManager = () => {
   };
 
   const editColumnName = (columnId: string, newName: string) => {
-    const column = columns.find(col => col.id === columnId);
-    if (column) {
-      const oldName = column.name;
-      setColumns(columns.map(col =>
-        col.id === columnId ? { ...col, name: newName } : col
-      ));
-    }
+    setProjects(projects.map(project =>
+      project.id === currentProjectId
+        ? {
+          ...project,
+          columns: project.columns.map(col =>
+            col.id === columnId ? { ...col, name: newName } : col
+          ),
+        }
+        : project
+    ));
   };
 
   const moveTask = (taskId: string, sourceColId: string, targetColId: string) => {
@@ -187,20 +207,23 @@ export const useTaskManager = () => {
       const task = sourceColumn.tasks.find(task => task.id === taskId);
 
       if (task) {
-        try {
-          await axios.put(`${API_BASE_URL}/tasks/${taskId}`, { columnId: targetColId });
-          setColumns(columns.map(col => {
-            if (col.id === sourceColId) {
-              return { ...col, tasks: col.tasks.filter(task => task.id !== taskId) };
-            }
-            if (col.id === targetColId) {
-              return { ...col, tasks: [...col.tasks, task] };
-            }
-            return col;
-          }));
-        } catch (error) {
-          console.error('Error moving task:', error);
-        }
+        setProjects(projects.map(project => {
+          if (project.id === currentProjectId) {
+            return {
+              ...project,
+              columns: project.columns.map(col => {
+                if (col.id === sourceColId) {
+                  return { ...col, tasks: col.tasks.filter(task => task.id !== taskId) };
+                }
+                if (col.id === targetColId) {
+                  return { ...col, tasks: [...col.tasks, task] };
+                }
+                return col;
+              }),
+            };
+          }
+          return project;
+        }));
       }
     }
   };
@@ -218,7 +241,7 @@ export const useTaskManager = () => {
   const deleteProject = (projectId: string) => {
     const filteredProjects = projects.filter(project => project.id !== projectId);
     setProjects(filteredProjects);
-
+    
     if (filteredProjects.length > 0) {
       setCurrentProjectId(filteredProjects[0].id);
     } else {
