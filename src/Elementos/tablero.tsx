@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useTaskManager } from '../hook/useTaskManager';
 import Aside from './aside';
 import Columna from './Columna';
@@ -21,7 +21,6 @@ const Tablero: React.FC = () => {
     deleteColumn,
     editColumnName,
     moveTask,
-    createProject,
   } = useTaskManager();
   return (
     <>
