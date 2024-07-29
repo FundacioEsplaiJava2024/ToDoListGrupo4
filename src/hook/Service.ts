@@ -5,7 +5,7 @@ const API_BASE_URL = 'http://localhost:8080/TodolistG4';
 export async function getElements() {
   try {
     const response = await axios.get(`${API_BASE_URL}/tasks`);
-    console.log('aaaaaaaa', response.data);
+    console.log('task', response.data);
     return response.data;
   } catch (error) {
     console.error('Error fetching elementos:', error);
@@ -15,7 +15,7 @@ export async function getElements() {
 export async function getProjects() {
   try {
     const response = await axios.get(`${API_BASE_URL}/project`);
-    console.log('ddsds', response.data);
+    console.log('project', response.data);
     return response.data;
   } catch (error) {
     console.error('Error fetching elementos:', error);
@@ -25,8 +25,8 @@ export async function getProjects() {
 
 export async function getColumns() {
   try {
-    const response = await axios.get(`${API_BASE_URL}/column`);
-    console.log('ddsds', response.data);
+    const response = await axios.get(`${API_BASE_URL}/columns`);
+    console.log('columna', response.data);
     return response.data;
   } catch (error) {
     console.error('Error fetching elementos:', error);
@@ -37,7 +37,7 @@ export async function getColumns() {
 export async function getUsers() {
   try {
     const response = await axios.get(`${API_BASE_URL}/user`);
-    console.log('ddsds', response.data);
+    console.log('user', response.data);
     return response.data;
   } catch (error) {
     console.error('Error fetching elementos:', error);
