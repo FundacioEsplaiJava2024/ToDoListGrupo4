@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Task } from '../domain/Task';
-import { getProjects, getColumnsByProjectId, getTasksByColumnId } from './Service';
+import { Service } from './Service';
 
 interface Column {
   id: string;
@@ -27,14 +27,22 @@ export const useTaskManager = () => {
       setLoading(true);
       setError(null);
       try {
-        const projectsData = await getProjects();
+        const projectsData = await Service.getProjects();
 
-        // Transform the data to match the expected format
-        const transformedProjects = projectsData.map((proj: any) => ({
-          id: proj.project_id.toString(),
-          name: proj.project_name,
-          columns: [], // Initialize with empty columns; adjust if needed
-        }));
+        if (!Array.isArray(projectsData)) {
+          throw new Error('Unexpected response format: projectsData is not an array');
+        }
+
+        const transformedProjects = projectsData.map((proj: any) => {
+          if (proj.idproject === undefined || proj.name === undefined) {
+            throw new Error('Unexpected response format: missing idproject or name');
+          }
+          return {
+            id: proj.idproject.toString(),
+            name: proj.name,
+            columns: [], // Initialize with empty columns; adjust if needed
+          };
+        });
 
         setProjects(transformedProjects);
         if (transformedProjects.length > 0) {
@@ -58,14 +66,18 @@ export const useTaskManager = () => {
         setLoading(true);
         setError(null);
         try {
-          const columnsData = await getColumnsByProjectId(currentProjectId);
+          const columnsData = await Service.getColumnsByProjectId(currentProjectId);
+
+          if (!Array.isArray(columnsData)) {
+            throw new Error('Unexpected response format: columns data is not an array');
+          }
 
           const columnsWithTasks = await Promise.all(
             columnsData.map(async (col: any) => {
-              const tasks = await getTasksByColumnId(col.column_id);
+              const tasks = await Service.getTasksByColumnId(col.idcolumn);
               return {
-                id: col.column_id,
-                name: col.column_name,
+                id: col.idcolumn,
+                name: col.nameColumn,
                 tasks: tasks.map((task: any) => ({
                   id: task.task_id,
                   name: task.task_name,
