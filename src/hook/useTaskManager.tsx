@@ -30,13 +30,14 @@ export const useTaskManager = () => {
         const projectsData = await getProjects();
 
         // Transform the data to match the expected format
-        const transformedProjects = projectsData.map((proj: any) => ({
-          id: proj.project_id.toString(),
-          name: proj.project_name,
+        const transformedProjects = projectsData.map((project: any) => ({
+          id: project.project_id,
+          name: project.project_name,
           columns: [], // Initialize with empty columns; adjust if needed
         }));
 
         setProjects(transformedProjects);
+        console.log(transformedProjects);
         if (transformedProjects.length > 0) {
           setCurrentProjectId(transformedProjects[0].id);
         }

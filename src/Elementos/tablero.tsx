@@ -1,9 +1,9 @@
+// src/components/Tablero.tsx
 import React from 'react';
 import { useTaskManager } from '../hook/useTaskManager';
 import Aside from './aside';
 import Columna from './Columna';
 import Header from './header';
-
 
 const Tablero: React.FC = () => {
   const {
@@ -22,11 +22,33 @@ const Tablero: React.FC = () => {
     editColumnName,
     moveTask,
   } = useTaskManager();
+
+  const handleCreateProject = () => {
+    const name = prompt('Ingrese el nombre del nuevo proyecto:');
+    if (name && name.trim() !== '') {
+      createProject(name.trim());
+    }
+  };
+
+  const handleDeleteProject = () => {
+    if (currentProject.id) {
+      if (window.confirm('¿Estás seguro de que deseas eliminar este proyecto?')) {
+        deleteProject(currentProject.id);
+      }
+    }
+  };
+
   return (
     <>
       <Header projectName={currentProject.name} onProjectNameChange={updateProjectName} />
       <main>
-        <Aside createProject={createProject}/>
+        <Aside
+          projects={projects}
+          onCreateProject={handleCreateProject}
+          onLoadProject={loadProject}
+          onDeleteProject={handleDeleteProject}
+          currentProjectId={currentProjectId}
+        />
         <div className='tablero'>
           <h2 className='plus'>
             <button onClick={() => {
@@ -54,7 +76,6 @@ const Tablero: React.FC = () => {
               
             />
           ))}
-
         </div>
       </main>
     </>
