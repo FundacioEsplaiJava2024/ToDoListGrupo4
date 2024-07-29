@@ -23,33 +23,26 @@ interface Project {
 }
 
 export const useTaskManager = () => {
-  const [projects, setProjects] = useState<Project[]>(() => {
-    const savedProjects = localStorage.getItem('projects');
-    return savedProjects ? JSON.parse(savedProjects) : [];
-  });
-  const [currentProjectId, setCurrentProjectId] = useState<string>(() => {
-    const savedCurrentProjectId = localStorage.getItem('currentProjectId');
-    return savedCurrentProjectId ? savedCurrentProjectId : '';
-  });
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [currentProjectId, setCurrentProjectId] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    localStorage.setItem('projects', JSON.stringify(projects));
-  }, [projects]);
-
-  useEffect(() => {
-    localStorage.setItem('currentProjectId', currentProjectId);
-  }, [currentProjectId]);
-
-  // Fetch projects from the API when the component mounts
+  // Fetch projects and tasks from the API when the component mounts
   useEffect(() => {
     const fetchInitialData = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        const response = await axios.get(`${API_BASE_URL}/tasks`, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-        const tasks: Task[] = response.data;
+        const projectsData = await getProjects();
+        const tasksData = await getElements();
+
+        // Transform the data to match the expected format
+        const transformedProjects = projectsData.map((proj: any) => ({
+          id: proj.idproject.toString(),
+          name: proj.name,
+          columns: [], // Initialize with empty columns; adjust if needed
+        }));
 
         // Agrupar tareas por columna
         const tasksByColumnId: { [key: string]: Task[] } = {};
@@ -60,97 +53,29 @@ export const useTaskManager = () => {
           tasksByColumnId[task.columnId].push(task);
         });
 
-        // Actualizar columnas con tareas
-        const newColumns = columns.map(col => ({
-          ...col,
-          tasks: tasksByColumnId[col.id] || [],
+        // Actualizar proyectos con tareas en sus columnas
+        const projectsWithTasks = transformedProjects.map((project: Project) => ({
+          ...project,
+          columns: project.columns.map((column: Column) => ({
+            ...column,
+            tasks: tasksByColumnId[column.id] || [],
+          })),
         }));
 
-        newColumns(newColumns);
+        setProjects(projectsWithTasks);
+        if (projectsWithTasks.length > 0) {
+          setCurrentProjectId(projectsWithTasks[0].id);
+        }
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching initial data:', error);
+        setError('Failed to fetch data');
+        setLoading(false);
       }
     };
 
     fetchInitialData();
   }, []);
-
-  // Fetch columns and tasks when the current project changes
-  useEffect(() => {
-    if (currentProjectId) {
-      const fetchProjectData = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-          const columnsData = await getColumnsByProjectId(currentProjectId);
-
-  const addTask = async (columnId: string, taskName: string) => {
-    try {
-      const column = columns.find(col => col.id === columnId);
-      if (column) {
-        const response = await axios.post(`${API_BASE_URL}/tasks`, {
-          content: taskName,
-          columnId: columnId
-        });
-        const task = response.data;
-        setColumns(columns.map(col =>
-          col.id === columnId
-            ? { ...col, tasks: [...col.tasks, task] }
-            : col
-        ));
-      }
-    } catch (error) {
-      console.error('Error adding task:', error);
-    }
-  };
-
-  const deleteTask = async (columnId: string, taskId: string) => {
-    try {
-      await axios.delete(`${API_BASE_URL}/tasks/${taskId}`);
-      setColumns(columns.map(col =>
-        col.id === columnId
-          ? { ...col, tasks: col.tasks.filter(task => task.id !== taskId) }
-          : col
-      ));
-    } catch (error) {
-      console.error('Error deleting task:', error);
-    }
-  };
-
-  const editTask = async (columnId: string, taskId: string, newName: string) => {
-    try {
-      await axios.put(`${API_BASE_URL}/tasks/${taskId}`, { content: newName });
-      setColumns(columns.map(col =>
-        col.id === columnId
-          ? {
-            ...col,
-            tasks: col.tasks.map(task =>
-              task.id === taskId ? { ...task, name: newName } : task
-            )
-          );
-
-  const createProject = async (projectName: string) => {
-    const newProject = { id: uuidv4(), projectName, columns: [] };
-  };
-
-  const addColumn = async (name: string) => {
-    const newColumn = { id: uuidv4(), name, tasks: [] };
-    setColumns([...columns, newColumn]);
-  };
-
-  const deleteColumn = async (columnId: string) => {
-    const column = columns.find(col => col.id === columnId);
-    if (column) {
-      try {
-        const tasks = column.tasks;
-        for (const task of tasks) {
-          await axios.delete(`${API_BASE_URL}/tasks/${task.id}`);
-        }
-      };
-
-      fetchProjectData();
-    }
-  }, [currentProjectId]);
 
   // Save projects to localStorage when they change
   useEffect(() => {
@@ -290,15 +215,12 @@ export const useTaskManager = () => {
   };
 
   const deleteProject = (projectId: string) => {
-    // Eliminar el proyecto actual y seleccionar el siguiente disponible
     const filteredProjects = projects.filter(project => project.id !== projectId);
     setProjects(filteredProjects);
 
     if (filteredProjects.length > 0) {
-      // Si hay proyectos restantes, seleccionar el primero
       setCurrentProjectId(filteredProjects[0].id);
     } else {
-      // Si no quedan proyectos, deseleccionar el proyecto
       setCurrentProjectId('');
     }
   };
@@ -307,6 +229,8 @@ export const useTaskManager = () => {
     currentProject,
     currentProjectId,
     projects,
+    loading,
+    error,
     createProject,
     loadProject,
     deleteProject,

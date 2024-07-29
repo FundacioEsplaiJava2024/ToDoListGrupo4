@@ -19,11 +19,12 @@ const Aside: React.FC<AsideProps> = ({ createProject }) => {
         <nav>
           <ul>
             <li>
-              <ul>
-                <h3>Proyectos:</h3>
-                <li><span onClick={handleNewProject}>Nuevo proyecto</span></li>
-                <li><span>Cargar proyectos</span></li>
-              </ul>
+              <select value={currentProjectId} onChange={(e) => onLoadProject(e.target.value)} defaultValue="">
+                <option value="" disabled>Seleccionar Proyecto</option>
+                {projects.map(project => (
+                  <option key={project.id} value={project.id}>{project.name}</option>
+                ))}
+              </select>
             </li>
           </ul>
         </nav>
