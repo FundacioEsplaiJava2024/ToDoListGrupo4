@@ -1,12 +1,19 @@
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
 import { Task } from '../domain/Task';
-import { getProjects } from './Service';
+
+const API_BASE_URL = 'http://localhost:8080/TodolistG4'; // Asegúrate de que esta URL sea correcta
 
 interface Column {
   id: string;
   name: string;
   tasks: Task[];
+}
+interface Project {
+  projectId: string;
+  projectName: string;
+  columns: Column[];
 }
 
 interface Project {
@@ -37,20 +44,29 @@ export const useTaskManager = () => {
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const projectsData = await getProjects();
+        const response = await axios.get(`${API_BASE_URL}/tasks`, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        const tasks: Task[] = response.data;
 
-        // Transform the data to match the expected format
-        const transformedProjects = projectsData.map((proj: any) => ({
-          id: proj.project_id.toString(),
-          name: proj.project_name,
-          columns: [], // Initialize with empty columns; adjust if needed
+        // Agrupar tareas por columna
+        const tasksByColumnId: { [key: string]: Task[] } = {};
+        tasks.forEach((task) => {
+          if (!tasksByColumnId[task.columnId]) {
+            tasksByColumnId[task.columnId] = [];
+          }
+          tasksByColumnId[task.columnId].push(task);
+        });
+
+        // Actualizar columnas con tareas
+        const newColumns = columns.map(col => ({
+          ...col,
+          tasks: tasksByColumnId[col.id] || [],
         }));
 
-        setProjects(transformedProjects);
-        if (transformedProjects.length > 0) {
-          setCurrentProjectId(transformedProjects[0].id);
-        }
-        setLoading(false);
+        newColumns(newColumns);
       } catch (error) {
         console.error('Error fetching initial data:', error);
       }
@@ -68,34 +84,67 @@ export const useTaskManager = () => {
         try {
           const columnsData = await getColumnsByProjectId(currentProjectId);
 
-          const columnsWithTasks = await Promise.all(
-            columnsData.map(async (col: any) => {
-              const tasks = await getTasksByColumnId(col.column_id);
-              return {
-                id: col.column_id,
-                name: col.column_name,
-                tasks: tasks.map((task: any) => ({
-                  id: task.task_id,
-                  name: task.task_name,
-                  columnId: task.column_id,
-                })),
-              };
-            })
-          );
+  const addTask = async (columnId: string, taskName: string) => {
+    try {
+      const column = columns.find(col => col.id === columnId);
+      if (column) {
+        const response = await axios.post(`${API_BASE_URL}/tasks`, {
+          content: taskName,
+          columnId: columnId
+        });
+        const task = response.data;
+        setColumns(columns.map(col =>
+          col.id === columnId
+            ? { ...col, tasks: [...col.tasks, task] }
+            : col
+        ));
+      }
+    } catch (error) {
+      console.error('Error adding task:', error);
+    }
+  };
 
-          setProjects((prevProjects) =>
-            prevProjects.map((project) =>
-              project.id === currentProjectId
-                ? { ...project, columns: columnsWithTasks }
-                : project
+  const deleteTask = async (columnId: string, taskId: string) => {
+    try {
+      await axios.delete(`${API_BASE_URL}/tasks/${taskId}`);
+      setColumns(columns.map(col =>
+        col.id === columnId
+          ? { ...col, tasks: col.tasks.filter(task => task.id !== taskId) }
+          : col
+      ));
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
+  };
+
+  const editTask = async (columnId: string, taskId: string, newName: string) => {
+    try {
+      await axios.put(`${API_BASE_URL}/tasks/${taskId}`, { content: newName });
+      setColumns(columns.map(col =>
+        col.id === columnId
+          ? {
+            ...col,
+            tasks: col.tasks.map(task =>
+              task.id === taskId ? { ...task, name: newName } : task
             )
           );
 
-          setLoading(false);
-        } catch (error) {
-          console.error('Error fetching project data:', error);
-          setError('Failed to fetch project data');
-          setLoading(false);
+  const createProject = async (projectName: string) => {
+    const newProject = { id: uuidv4(), projectName, columns: [] };
+  };
+
+  const addColumn = async (name: string) => {
+    const newColumn = { id: uuidv4(), name, tasks: [] };
+    setColumns([...columns, newColumn]);
+  };
+
+  const deleteColumn = async (columnId: string) => {
+    const column = columns.find(col => col.id === columnId);
+    if (column) {
+      try {
+        const tasks = column.tasks;
+        for (const task of tasks) {
+          await axios.delete(`${API_BASE_URL}/tasks/${task.id}`);
         }
       };
 
@@ -193,16 +242,13 @@ export const useTaskManager = () => {
   };
 
   const editColumnName = (columnId: string, newName: string) => {
-    setProjects(projects.map(project =>
-      project.id === currentProjectId
-        ? {
-          ...project,
-          columns: project.columns.map(col =>
-            col.id === columnId ? { ...col, name: newName } : col
-          ),
-        }
-        : project
-    ));
+    const column = columns.find(col => col.id === columnId);
+    if (column) {
+      const oldName = column.name;
+      setColumns(columns.map(col =>
+        col.id === columnId ? { ...col, name: newName } : col
+      ));
+    }
   };
 
   const moveTask = (taskId: string, sourceColId: string, targetColId: string) => {
@@ -215,23 +261,20 @@ export const useTaskManager = () => {
       const task = sourceColumn.tasks.find(task => task.id === taskId);
 
       if (task) {
-        setProjects(projects.map(project => {
-          if (project.id === currentProjectId) {
-            return {
-              ...project,
-              columns: project.columns.map(col => {
-                if (col.id === sourceColId) {
-                  return { ...col, tasks: col.tasks.filter(task => task.id !== taskId) };
-                }
-                if (col.id === targetColId) {
-                  return { ...col, tasks: [...col.tasks, task] };
-                }
-                return col;
-              }),
-            };
-          }
-          return project;
-        }));
+        try {
+          await axios.put(`${API_BASE_URL}/tasks/${taskId}`, { columnId: targetColId });
+          setColumns(columns.map(col => {
+            if (col.id === sourceColId) {
+              return { ...col, tasks: col.tasks.filter(task => task.id !== taskId) };
+            }
+            if (col.id === targetColId) {
+              return { ...col, tasks: [...col.tasks, task] };
+            }
+            return col;
+          }));
+        } catch (error) {
+          console.error('Error moving task:', error);
+        }
       }
     }
   };
@@ -275,5 +318,6 @@ export const useTaskManager = () => {
     deleteColumn,
     editColumnName,
     moveTask,
+    createProject,
   };
 };
