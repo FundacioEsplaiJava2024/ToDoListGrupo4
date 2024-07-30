@@ -29,9 +29,6 @@ const Aside: React.FC<AsideProps> = ({ projects, onCreateProject, onLoadProject,
                 <button onClick={() => onDeleteProject(currentProjectId)}>Eliminar Proyecto Actual</button>
               </li>
             )}
-            <li><a href='#'>Quienes somos</a></li>
-            <li><a href='#'>Utilidad de la app</a></li>
-            <li><a href='#'>Proyectos</a></li>
           </ul>
         </nav>
       </div>
