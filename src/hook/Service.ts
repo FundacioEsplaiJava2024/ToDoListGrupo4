@@ -72,9 +72,9 @@ export class Service {
         taskName,
         sourceColumn,
       });
-      console.log('Tarea agregada:', response.data);
+      console.log('Columna agregada:', response.data);
     } catch (error) {
-      console.error('Error al agregar la tarea:', error);
+      console.error('Error al agregar la columna:', error);
     }
   };
   static async addTask(taskId: string, taskName: string, sourceColumn: string) {
