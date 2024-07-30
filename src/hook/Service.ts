@@ -53,6 +53,30 @@ export class Service {
       throw error;
     }
   };
+  static async addProject(name: string, idproject: string, iduser: string) {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/projects`, {
+        name,
+        idproject,
+        iduser,
+      });
+      console.log('Project agregada:', response.data);
+    } catch (error) {
+      console.error('Error al agregar el project:', error);
+    }
+  };
+  static async addColumn(taskId: string, taskName: string, sourceColumn: string) {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/tasks/add`, {
+        taskId,
+        taskName,
+        sourceColumn,
+      });
+      console.log('Tarea agregada:', response.data);
+    } catch (error) {
+      console.error('Error al agregar la tarea:', error);
+    }
+  };
   static async addTask(taskId: string, taskName: string, sourceColumn: string) {
     try {
       const response = await axios.post(`${API_BASE_URL}/tasks/add`, {

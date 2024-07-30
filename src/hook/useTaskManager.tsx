@@ -244,6 +244,7 @@ export const useTaskManager = () => {
 
   const createProject = (name: string) => {
     const newProject = { id: uuidv4(), name, columns: [] };
+    Service.addProject(newProject.name, newProject.id, "5");
     setProjects([...projects, newProject]);
     setCurrentProjectId(newProject.id);
   };
