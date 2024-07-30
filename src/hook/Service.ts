@@ -118,9 +118,13 @@ export class Service{
         throw error;
       }
     };
-    static async updateProject(projectId: string, updatedProject:string){
+    static async updateProject(projectId: string, updatedProject:string, userId:number){
       try {
-        const response = await axios.post(`${API_BASE_URL}/projects/update/`+projectId,updatedProject);
+        const response = await axios.post(`${API_BASE_URL}/projects/update/`+projectId,{
+          "idproject": projectId,
+          "iduser": userId,
+          "name": updatedProject
+      });
         return response.data;
       } catch (error) {
         console.error('Error fetching elementos:', error);
