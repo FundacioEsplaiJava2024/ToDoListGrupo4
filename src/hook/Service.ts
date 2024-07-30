@@ -1,5 +1,6 @@
 import { Task } from '@doist/todoist-api-typescript';
 import axios from 'axios';
+import { SourceTextModule } from 'vm';
 
 const API_BASE_URL = 'http://localhost:8080/TodolistG4';
 
@@ -60,7 +61,7 @@ export class Service {
         throw error;
       }
     };
-    static async getUserProjects(userId: string){
+    static async getUserProjects(userId: number){
       try {
         const response = await axios.get(`${API_BASE_URL}/projects/`+userId);
         console.log('projects',response.data);
@@ -167,5 +168,24 @@ export class Service {
         throw error;
       }
     };
+    static async login(username: string, password:string){
+      try{
+        const response = await axios.post (`${API_BASE_URL}/user/login`,{"username":username,"password":password});
+        console.log("lere "+ response.data);
+        return response.data;
+      } catch (error){
+        console.error('Error deleting task:', error);
+        throw error;
+      }
+    }
+    static async register(username: string, password:string){
+      try{
+        const response = await axios.post (`${API_BASE_URL}/user/add`,{"username":username,"password":password});
+        return response.data;
+      } catch (error){
+        console.error('Error deleting task:', error);
+        throw error;
+      }
+    }
 }
 

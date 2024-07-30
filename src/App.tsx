@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 import './Elementos/fontAwesomeSetup';
 import Tablero from './Elementos/tablero';
@@ -21,6 +21,7 @@ const App: React.FC = () => {
 
 const Content: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Añadir o quitar clase según la ruta
   useEffect(() => {
@@ -31,11 +32,15 @@ const Content: React.FC = () => {
     }
   }, [location.pathname]);
 
+  const handleClose = () => {
+    navigate('/'); // Redirecciona a la página principal
+  };
+
   return (
     <>
       {location.pathname !== '/logup' && <Header />}
       <Routes>
-        <Route path="/logup" element={<LogUp onClose={() => {}} />} />
+        <Route path="/logup" element={<LogUp onClose={handleClose} />} />
         <Route path="/" element={<Tablero />} />
       </Routes>
       {location.pathname !== '/logup' && <Footer />}

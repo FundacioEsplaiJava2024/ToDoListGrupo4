@@ -21,13 +21,21 @@ export const useTaskManager = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch projects from the API when the component mounts
   useEffect(() => {
     const fetchInitialData = async () => {
       setLoading(true);
       setError(null);
       try {
-        const projectsData = await Service.getProjects();
+        const userIdString = localStorage.getItem('userId');
+        if (!userIdString) {
+          throw new Error('User ID not found');
+        }
+        const userId = parseInt(userIdString, 10);
+        if (isNaN(userId)) {
+          throw new Error('Invalid User ID');
+        }
+
+        const projectsData = await Service.getUserProjects(userId);
 
         if (!Array.isArray(projectsData)) {
           throw new Error('Unexpected response format: projectsData is not an array');
@@ -60,7 +68,6 @@ export const useTaskManager = () => {
     fetchInitialData();
   }, []);
 
-  // Fetch columns and tasks when the current project changes
   useEffect(() => {
     if (currentProjectId) {
       const fetchProjectData = async () => {
@@ -108,12 +115,10 @@ export const useTaskManager = () => {
     }
   }, [currentProjectId]);
 
-  // Save projects to localStorage when they change
   useEffect(() => {
     localStorage.setItem('projects', JSON.stringify(projects));
   }, [projects]);
 
-  // Save currentProjectId to localStorage when it changes
   useEffect(() => {
     localStorage.setItem('currentProjectId', currentProjectId);
   }, [currentProjectId]);
@@ -124,7 +129,15 @@ export const useTaskManager = () => {
     setProjects(projects.map(project =>
       project.id === currentProjectId ? { ...project, name: newName } : project
     ));
-    Service.updateProject(currentProjectId,newName, 1);//Cambiar el 1 por el USER ID cuando esté echo
+    const userIdString = localStorage.getItem('userId');
+    if (!userIdString) {
+      throw new Error('User ID not found');
+    }
+    const userId = parseInt(userIdString, 10);
+    if (isNaN(userId)) {
+      throw new Error('Invalid User ID');
+    }
+    Service.updateProject(currentProjectId, newName, userId);
   };
 
   const addTask = (columnId: string, taskName: string) => {
@@ -176,7 +189,7 @@ export const useTaskManager = () => {
       }
       return project;
     }));
-    Service.updateTask(taskId,newName);
+    Service.updateTask(taskId, newName);
   };
 
   const addColumn = (name: string) => {
@@ -212,7 +225,7 @@ export const useTaskManager = () => {
         }
         : project
     ));
-    Service.updateColumn(columnId,newName, currentProjectId);
+    Service.updateColumn(columnId, newName, currentProjectId);
   };
 
   const moveTask = (taskId: string, sourceColId: string, targetColId: string) => {
@@ -240,7 +253,7 @@ export const useTaskManager = () => {
               }),
             };
           }
-          Service.updateTaskColumn(taskId,targetColId)
+          Service.updateTaskColumn(taskId, targetColId);
           return project;
         }));
       }
@@ -248,8 +261,16 @@ export const useTaskManager = () => {
   };
 
   const createProject = (name: string) => {
+    const userIdString = localStorage.getItem('userId');
+    if (!userIdString) {
+      throw new Error('User ID not found');
+    }
+    const userId = parseInt(userIdString, 10);
+    if (isNaN(userId)) {
+      throw new Error('Invalid User ID');
+    }
     const newProject = { id: uuidv4(), name, columns: [] };
-    Service.addProject(newProject.name, newProject.id, 5);
+    Service.addProject(newProject.name, newProject.id, userId);
     setProjects([...projects, newProject]);
     setCurrentProjectId(newProject.id);
   };
