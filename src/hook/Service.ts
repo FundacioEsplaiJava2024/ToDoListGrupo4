@@ -1,3 +1,4 @@
+import { Task } from '@doist/todoist-api-typescript';
 import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:8080/TodolistG4';
@@ -53,5 +54,44 @@ export class Service{
         throw error;
       }
     };
+      static async updateTask(taskId: string, newName: string){
+      try {
+        console.log("asldfjsalkfjlsfl", newName);
+        const response = await axios.post(`${API_BASE_URL}/tasks/`+taskId+`/edit`,{"newName":newName});
+        return response.data;
+      } catch (error) {
+        console.error('Error fetching elementos:', error);
+        throw error;
+      }
+    };
+    static async updateTaskColumn(taskId: string, newCol: string){
+      try {
+        const response = await axios.post(`${API_BASE_URL}/tasks/`+taskId+`/move`,newCol);
+        return response.data;
+      } catch (error) {
+        console.error('Error fetching elementos:', error);
+        throw error;
+      }
+    };
+    static async updateColumn(columnId: string, newName: string){
+      try {
+        const response = await axios.post(`${API_BASE_URL}/columns/edit/`+columnId, newName);
+        return response.data;
+      } catch (error) {
+        console.error('Error fetching elementos:', error);
+        throw error;
+      }
+    };
+    static async updateProject(projectId: string, updatedProject:string){
+      try {
+        const response = await axios.post(`${API_BASE_URL}/projects/update/`+projectId,updatedProject);
+        return response.data;
+      } catch (error) {
+        console.error('Error fetching elementos:', error);
+        throw error;
+      }
+    };
+    
+    
 }
 
