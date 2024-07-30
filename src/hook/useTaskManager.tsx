@@ -45,6 +45,7 @@ export const useTaskManager = () => {
         });
 
         setProjects(transformedProjects);
+        console.log(transformedProjects);
         if (transformedProjects.length > 0) {
           setCurrentProjectId(transformedProjects[0].id);
         }
@@ -128,6 +129,7 @@ export const useTaskManager = () => {
 
   const addTask = (columnId: string, taskName: string) => {
     const task = { id: uuidv4(), name: taskName, columnId };
+    Service.addTask(task.id, task.name, task.columnId);
     setProjects(projects.map(project => {
       if (project.id === currentProjectId) {
         return {
@@ -184,6 +186,7 @@ export const useTaskManager = () => {
         ? { ...project, columns: [...project.columns, newColumn] }
         : project
     ));
+    Service.addColumn(newColumn.id, newColumn.name, project.id);
   };
 
   const deleteColumn = (columnId: string) => {
@@ -246,6 +249,7 @@ export const useTaskManager = () => {
 
   const createProject = (name: string) => {
     const newProject = { id: uuidv4(), name, columns: [] };
+    Service.addProject(newProject.name, newProject.id, "5");
     setProjects([...projects, newProject]);
     setCurrentProjectId(newProject.id);
   };

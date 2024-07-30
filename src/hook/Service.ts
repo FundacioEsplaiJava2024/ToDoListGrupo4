@@ -3,15 +3,51 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:8080/TodolistG4';
 
-export class Service{
+export class Service {
   static async getElements() {
     try {
       const response = await axios.get(`${API_BASE_URL}/tasks`);
-      console.log('aaaaaaaa',response.data);
+      console.log('aaaaaaaa', response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching elementos:', error);
       throw error;
+    }
+  };
+  static async addProject(name: string, idproject: string, iduser: string) {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/projects`, {
+        name,
+        idproject,
+        iduser,
+      });
+      console.log('Project agregada:', response.data);
+    } catch (error) {
+      console.error('Error al agregar el project:', error);
+    }
+  };
+  static async addColumn(columnId: string, newName: string, projectid:string) {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/columns/edit/${columnId}`, {
+        columnId,
+        newName,
+        projectid,
+      });
+      console.log('Columna agregada:', response.data);
+    } catch (error) {
+      console.error('Error al agregar la columna:', error);
+    }
+  };
+  static async addTask(taskId: string, taskName: string, sourceColumn: string) {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/tasks/add`, {
+        taskId,
+        taskName,
+        sourceColumn,
+      });
+      console.log('Tarea agregada:', response.data);
+    } catch (error) {
+      console.error('Error al agregar la tarea:', error);
     }
   };
   static async getProjects(){
@@ -131,7 +167,5 @@ export class Service{
         throw error;
       }
     };
-    
-    
 }
 

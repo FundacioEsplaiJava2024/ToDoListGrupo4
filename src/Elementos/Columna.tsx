@@ -63,6 +63,8 @@ const Columna: React.FC<ColumnaProps> = ({ tasks, name, columnId, addTask, delet
       moveTask(item.id, item.sourceColId, targetColId);
     },
   });
+
+  console.log(columnId);
   return (
     <div ref={drop} className="parametros">
       <div className="column-header">
