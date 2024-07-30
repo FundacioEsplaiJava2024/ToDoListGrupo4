@@ -26,7 +26,7 @@ export const useTaskManager = () => {
     const fetchInitialData = async () => {
       setLoading(true);
       setError(null);
-      try {
+      try { 
         const projectsData = await Service.getProjects();
 
         if (!Array.isArray(projectsData)) {
@@ -37,7 +37,7 @@ export const useTaskManager = () => {
           if (proj.idproject === undefined || proj.name === undefined) {
             throw new Error('Unexpected response format: missing idproject or name');
           }
-          return {
+          return {  
             id: proj.idproject.toString(),
             name: proj.name,
             columns: [], // Initialize with empty columns; adjust if needed
@@ -148,7 +148,7 @@ export const useTaskManager = () => {
 
   const deleteTask = async (columnId: string, taskId: string) => {
     try {
-      //await Service.deleteTask(taskId);
+      await Service.deleteTask(taskId);
       setProjects(projects.map(project => {
         if (project.id === currentProjectId) {
           return {
@@ -204,7 +204,7 @@ export const useTaskManager = () => {
 
   const deleteColumn = async (columnId: string) => {
     try {
-      //await Service.deleteColumn(columnId);
+      await Service.deleteColumn(columnId);
       setProjects(projects.map(project => {
         if (project.id === currentProjectId) {
           return {
@@ -288,7 +288,7 @@ export const useTaskManager = () => {
 
   const deleteProject = async (projectId: string) => {
     try {
-      //await Service.deleteProject(projectId);
+      await Service.deleteProject(projectId);
       const filteredProjects = projects.filter(project => project.id !== projectId);
       setProjects(filteredProjects);
       
