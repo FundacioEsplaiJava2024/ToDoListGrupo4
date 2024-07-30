@@ -35,7 +35,7 @@ const Content: React.FC = () => {
     <>
       {location.pathname !== '/logup' && <Header />}
       <Routes>
-        <Route path="/logup" element={<LogUp />} />
+        <Route path="/logup" element={<LogUp onClose={() => {}} />} />
         <Route path="/" element={<Tablero />} />
       </Routes>
       {location.pathname !== '/logup' && <Footer />}
