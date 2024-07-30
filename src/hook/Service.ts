@@ -14,14 +14,14 @@ export class Service {
       throw error;
     }
   };
-  static async addProject(name: string, idproject: string, iduser: string) {
+  static async addProject(name: string, idproject: string, iduser: number) {
     try {
-      const response = await axios.post(`${API_BASE_URL}/projects`, {
-        name,
-        idproject,
-        iduser,
+      const response = await axios.post(`${API_BASE_URL}/projects/add`, {
+        "idproject":idproject,
+        "iduser":iduser,
+        "name":name,
       });
-      console.log('Project agregada:', response.data);
+      console.log('Project agregado:', response.data);
     } catch (error) {
       console.error('Error al agregar el project:', error);
     }
@@ -52,7 +52,7 @@ export class Service {
   };
   static async getProjects(){
       try {
-        const response = await axios.get(`${API_BASE_URL}/projects`);
+        const response = await axios.get(`${API_BASE_URL}/projects/list`);
         console.log('ddsds',response.data);
         return response.data;
       } catch (error) {

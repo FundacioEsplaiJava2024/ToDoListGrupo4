@@ -186,7 +186,7 @@ export const useTaskManager = () => {
         ? { ...project, columns: [...project.columns, newColumn] }
         : project
     ));
-    Service.addColumn(newColumn.id, newColumn.name, project.id);
+    Service.addColumn(newColumn.id, newColumn.name, currentProjectId);
   };
 
   const deleteColumn = (columnId: string) => {
@@ -249,7 +249,7 @@ export const useTaskManager = () => {
 
   const createProject = (name: string) => {
     const newProject = { id: uuidv4(), name, columns: [] };
-    Service.addProject(newProject.name, newProject.id, "5");
+    Service.addProject(newProject.name, newProject.id, 5);
     setProjects([...projects, newProject]);
     setCurrentProjectId(newProject.id);
   };
