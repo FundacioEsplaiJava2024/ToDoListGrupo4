@@ -128,6 +128,7 @@ export const useTaskManager = () => {
 
   const addTask = (columnId: string, taskName: string) => {
     const task = { id: uuidv4(), name: taskName, columnId };
+    Service.addTask(task.id, task.name, task.columnId);
     setProjects(projects.map(project => {
       if (project.id === currentProjectId) {
         return {
