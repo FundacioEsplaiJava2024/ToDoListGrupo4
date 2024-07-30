@@ -56,7 +56,6 @@ export class Service{
     };
       static async updateTask(taskId: string, newName: string){
       try {
-        console.log("asldfjsalkfjlsfl", newName);
         const response = await axios.post(`${API_BASE_URL}/tasks/`+taskId+`/edit`,{"newName":newName});
         return response.data;
       } catch (error) {
@@ -66,16 +65,20 @@ export class Service{
     };
     static async updateTaskColumn(taskId: string, newCol: string){
       try {
-        const response = await axios.post(`${API_BASE_URL}/tasks/`+taskId+`/move`,newCol);
+        const response = await axios.post(`${API_BASE_URL}/tasks/`+taskId+`/move`,{"newColumn":newCol});
         return response.data;
       } catch (error) {
         console.error('Error fetching elementos:', error);
         throw error;
       }
     };
-    static async updateColumn(columnId: string, newName: string){
+    static async updateColumn(columnId: string, newName: string, projectid:string){
       try {
-        const response = await axios.post(`${API_BASE_URL}/columns/edit/`+columnId, newName);
+        const response = await axios.post(`${API_BASE_URL}/columns/edit/`+columnId, {
+          "nameColumn":newName,
+          "idproject":projectid,
+          "idcolumn":columnId
+        });
         return response.data;
       } catch (error) {
         console.error('Error fetching elementos:', error);
