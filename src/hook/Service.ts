@@ -65,12 +65,12 @@ export class Service {
       console.error('Error al agregar el project:', error);
     }
   };
-  static async addColumn(taskId: string, taskName: string, sourceColumn: string) {
+  static async addColumn(columnId: string, newName: string, projectid:string) {
     try {
-      const response = await axios.post(`${API_BASE_URL}/tasks/add`, {
-        taskId,
-        taskName,
-        sourceColumn,
+      const response = await axios.post(`${API_BASE_URL}/columns/edit/${columnId}`, {
+        columnId,
+        newName,
+        projectid,
       });
       console.log('Columna agregada:', response.data);
     } catch (error) {
