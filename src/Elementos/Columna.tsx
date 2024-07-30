@@ -59,7 +59,7 @@ const Columna: React.FC<ColumnaProps> = ({ tasks, name, columnId, addTask, delet
   const [, drop] = useDrop({
     accept: ItemTypes.TaskM,
     drop: (item: { id: string; sourceColId: string}) => {
-      const targetColId = columnId; //stá mal
+      const targetColId = columnId; 
       moveTask(item.id, item.sourceColId, targetColId);
     },
   });

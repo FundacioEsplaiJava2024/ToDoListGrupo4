@@ -40,7 +40,7 @@ export const useTaskManager = () => {
           return {
             id: proj.idproject.toString(),
             name: proj.name,
-            columns: [], // Initialize with empty columns; adjust if needed
+            columns: [], 
           };
         });
 
@@ -82,7 +82,7 @@ export const useTaskManager = () => {
                 tasks: tasks.map((task: any) => ({
                   id: task.taskId,
                   name: task.taskName,
-                  columnId: task.idcolumn,
+                  columnId: task.sourceColumn,
                 })),
               };
             })
@@ -124,6 +124,7 @@ export const useTaskManager = () => {
     setProjects(projects.map(project =>
       project.id === currentProjectId ? { ...project, name: newName } : project
     ));
+    Service.updateProject(currentProjectId,newName, 1);//Cambiar el 1 por el USER ID cuando esté echo
   };
 
   const addTask = (columnId: string, taskName: string) => {
@@ -175,6 +176,7 @@ export const useTaskManager = () => {
       }
       return project;
     }));
+    Service.updateTask(taskId,newName);
   };
 
   const addColumn = (name: string) => {
@@ -210,6 +212,7 @@ export const useTaskManager = () => {
         }
         : project
     ));
+    Service.updateColumn(columnId,newName, currentProjectId);
   };
 
   const moveTask = (taskId: string, sourceColId: string, targetColId: string) => {
@@ -237,6 +240,7 @@ export const useTaskManager = () => {
               }),
             };
           }
+          Service.updateTaskColumn(taskId,targetColId)
           return project;
         }));
       }
