@@ -80,9 +80,9 @@ export const useTaskManager = () => {
                 id: col.idcolumn,
                 name: col.nameColumn,
                 tasks: tasks.map((task: any) => ({
-                  id: task.task_id,
-                  name: task.task_name,
-                  columnId: task.column_id,
+                  id: task.taskId,
+                  name: task.taskName,
+                  columnId: task.idcolumn,
                 })),
               };
             })

@@ -46,7 +46,7 @@ export class Service{
     static async getTasksByColumnId(columnId: string){
       try {
         const response = await axios.get(`${API_BASE_URL}/tasks/column/`+columnId);
-        console.log('columns',response.data);
+        console.log('task',response.data);
         return response.data;
       } catch (error) {
         console.error('Error fetching elementos:', error);
