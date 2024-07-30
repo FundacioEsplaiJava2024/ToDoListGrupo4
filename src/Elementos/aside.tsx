@@ -17,7 +17,7 @@ const Aside: React.FC<AsideProps> = ({ projects, onCreateProject, onLoadProject,
           <ul>
             <li><a href='#' onClick={onCreateProject}>Crear Proyecto</a></li>
             <li>
-              <select value={currentProjectId} onChange={(e) => onLoadProject(e.target.value)} >
+              <select className='projects' value={currentProjectId} onChange={(e) => onLoadProject(e.target.value)} >
                 <option value="" disabled>Seleccionar Proyecto</option>
                 {projects.map(project => (
                   <option key={project.id} value={project.id}>{project.name}</option>
