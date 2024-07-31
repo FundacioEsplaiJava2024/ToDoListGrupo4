@@ -115,7 +115,9 @@ export class Service {
 
     static async deleteColumn(columnId: string) {
       try {
-        const response = await axios.delete(`${API_BASE_URL}/delete/${columnId}`);
+        console.log("Col",columnId);
+        console.log(`${API_BASE_URL}/delete/${columnId}`);
+        const response = await axios.delete(`${API_BASE_URL}/columns/delete/${columnId}`);
         return response.data;
       } catch (error) {
         console.error('Error deleting task:', error);
