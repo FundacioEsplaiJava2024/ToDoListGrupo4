@@ -144,6 +144,7 @@ export const useTaskManager = () => {
   };
 
   const deleteTask = (columnId: string, taskId: string) => {
+    Service.deleteTask(taskId);
     setProjects(projects.map(project => {
       if (project.id === currentProjectId) {
         return {
@@ -190,6 +191,8 @@ export const useTaskManager = () => {
   };
 
   const deleteColumn = (columnId: string) => {
+    console.log("Borrada" + columnId);
+    Service.deleteColumn(columnId);
     setProjects(projects.map(project => {
       if (project.id === currentProjectId) {
         return {
@@ -259,6 +262,7 @@ export const useTaskManager = () => {
   };
 
   const deleteProject = (projectId: string) => {
+    Service.deleteProject(projectId);
     const filteredProjects = projects.filter(project => project.id !== projectId);
     setProjects(filteredProjects);
     
