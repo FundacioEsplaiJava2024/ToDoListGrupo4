@@ -59,13 +59,13 @@ h2{
 }
 .inputbox{
     position: relative;
-    margin: 30px 0;
+    margin: 50px 0;
     max-width: 310px;
     border-bottom: 2px solid #fff;
 }
 .inputbox label{
     position: absolute;
-    top: 50%;
+    top: 15%;
     left: 5px;
     transform: translateY(-50%);
     color: #fff;
@@ -75,23 +75,9 @@ h2{
 }
 input:focus ~ label,
 input:focus ~ label{
-    top: -5px;
+    top: -10px;
 }
-.forget label{
-    display: flex;
-    align-items: center;
-}
-.foget label input{
-    margin-right: 3px;
-}
-.forget a{
-    color: #fff;
-    text-decoration: none;
-    font-weight: 600;
-}
-.forget a:hover{
-    text-decoration: underline;
-}
+
 button.form{
     width: 100%;
     height: 40px;
@@ -107,3 +93,17 @@ button.form{
 button:hover{
     background-color: rgb(255, 255, 255, 0.5);
 }
+
+/*css boton para regresar*/
+.back-arrow {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    cursor: pointer;
+    font-size: 2.5rem;
+    color: #fff;
+  }
+  .logUp-body {
+    position: relative;
+  }
+  
