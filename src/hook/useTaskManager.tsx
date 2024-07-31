@@ -236,7 +236,7 @@ export const useTaskManager = () => {
 
     if (sourceColumn && targetColumn) {
       const task = sourceColumn.tasks.find(task => task.id === taskId);
-
+      Service.updateTaskColumn(taskId, targetColId);
       if (task) {
         setProjects(projects.map(project => {
           if (project.id === currentProjectId) {
@@ -253,7 +253,6 @@ export const useTaskManager = () => {
               }),
             };
           }
-          Service.updateTaskColumn(taskId, targetColId);
           return project;
         }));
       }

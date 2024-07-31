@@ -136,6 +136,7 @@ export class Service {
     static async updateTaskColumn(taskId: string, newCol: string){
       try {
         const response = await axios.post(`${API_BASE_URL}/tasks/`+taskId+`/move`,{"newColumn":newCol});
+        console.log("MOVE "+response.data);
         return response.data;
       } catch (error) {
         console.error('Error fetching elementos:', error);

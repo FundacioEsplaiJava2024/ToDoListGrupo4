@@ -40,6 +40,7 @@ const LogUp: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     try {
       const response = await Service.login(loginData.username, loginData.password);
       console.log('Login successful:', response);
+      var userId = localStorage.setItem("userId",response);
       // Manejar redirección o almacenamiento de tokens aquí
       onClose();
     } catch (error) {
@@ -50,9 +51,18 @@ const LogUp: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
   const handleRegister = async () => {
     try {
-      const response = await Service.register(registerData.username, registerData.password);
+      var username = registerData.username;
+      var password = registerData.password;
+      const response = await Service.register(username, password);
       console.log('Registration successful:', response);
-      // Manejar redirección o almacenamiento de tokens aquí
+      try {
+        const response = await Service.login(username, password);
+        console.log('Login successful:', response);
+        var userId = localStorage.setItem("userId",response);
+      } catch (error) {
+        console.error('Error during login:', error);
+        // Manejar error de inicio de sesión
+      }
       onClose();
     } catch (error) {
       console.error('Error during registration:', error);
